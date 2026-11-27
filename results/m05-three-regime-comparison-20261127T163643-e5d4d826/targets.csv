@@ -1,0 +1,6 @@
+oracle,forecast_family,fitted_target
+gaussian,gaussian,0.11845756011127428
+garch,garch,-0.02159906621608133
+garch,gaussian,-0.002899599301276704
+gjr,gjr,0.19380379042640167
+gjr,gaussian,0.19786412716848314

@@ -1,0 +1,6 @@
+{
+  "original": "notebooks/Milestone_4_Gaussian_Baseline.ipynb",
+  "archive": "archive/m4_daily/Milestone_4_Gaussian_Baseline.ipynb",
+  "sha256": "d55f404c56c8b3008c7cbb30881130e2fc712231f09139295e756130b3742fc9",
+  "policy": "Untouched original and runnable archive; annual replacements live in separate notebooks."
+}

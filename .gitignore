@@ -2,6 +2,7 @@
 .venv-verify/
 .venv-notebook/
 notebooks/milestone4_results/
+/milestone4_results/
 notebooks/.ipynb_checkpoints/
 __pycache__/
 *.py[cod]
@@ -13,3 +14,5 @@ dist/
 .DS_Store
 results/*
 !results/README.md
+figures/*
+!figures/README.md

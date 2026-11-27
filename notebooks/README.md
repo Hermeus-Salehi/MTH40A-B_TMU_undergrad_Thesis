@@ -1,4 +1,8 @@
-# Run the Milestone 4 Gaussian notebook
+# Legacy daily Milestone 4 notebook
+
+For the active hybrid annual M4/M5 implementation, use the
+[research notebook guide](RESEARCH_GUIDE.md). This page documents the preserved
+self-contained daily baseline only.
 
 `Milestone_4_Gaussian_Baseline.ipynb` is a self-contained notebook: it uses no local
 project-module imports or external data. It contains 503 numbered subtasks, each
@@ -7,7 +11,7 @@ with a Markdown explanation and a code cell, plus three setup cells.
 Tasks 33–68 implement the core Gaussian baseline. Tasks 69–74 expose the
 reproducibility, known-answer, invalid-input, moment, ERC and Gaussian tail checks.
 Tasks 75–84 at the bottom generate and export the expanded visual outputs.
-Only Milestone 4 is implemented.
+This legacy notebook implements only the original daily Milestone 4 experiment.
 
 ## Start JupyterLab on your Mac
 

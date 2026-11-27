@@ -1,0 +1,47 @@
+{
+  "active_cells": 134,
+  "legacy_task_aliases": 443,
+  "notebooks": [
+    {
+      "notebook": "notebooks/experiments/01_parameter_recovery.ipynb",
+      "executed_code_cells": 7,
+      "image_outputs": 1
+    },
+    {
+      "notebook": "notebooks/experiments/02_monte_carlo_convergence.ipynb",
+      "executed_code_cells": 7,
+      "image_outputs": 1
+    },
+    {
+      "notebook": "notebooks/experiments/03_market_stress.ipynb",
+      "executed_code_cells": 5,
+      "image_outputs": 1
+    },
+    {
+      "notebook": "notebooks/experiments/04_three_regime_comparison.ipynb",
+      "executed_code_cells": 5,
+      "image_outputs": 1
+    },
+    {
+      "notebook": "notebooks/foundations/01_m5_mathematical_checks.ipynb",
+      "executed_code_cells": 8,
+      "image_outputs": 1
+    },
+    {
+      "notebook": "notebooks/modelling/01_iid_gaussian.ipynb",
+      "executed_code_cells": 31,
+      "image_outputs": 5
+    },
+    {
+      "notebook": "notebooks/modelling/02_garch_gaussian.ipynb",
+      "executed_code_cells": 35,
+      "image_outputs": 5
+    },
+    {
+      "notebook": "notebooks/modelling/03_gjr_gaussian.ipynb",
+      "executed_code_cells": 36,
+      "image_outputs": 6
+    }
+  ],
+  "reference_artifact_checksums": "passed"
+}

@@ -7,7 +7,16 @@ name = "thesis-portfolio"
 version = "0.1.0"
 description = "Reproducible Monte Carlo portfolio research for MTH40A/B"
 requires-python = ">=3.11,<3.14"
-dependencies = ["numpy>=2.2,<3", "scipy>=1.15,<2"]
+dependencies = [
+    "ipykernel>=6,<8",
+    "matplotlib>=3.9,<4",
+    "nbclient>=0.10,<1",
+    "nbformat>=5,<6",
+    "numpy>=2.2,<3",
+    "pandas>=2.2,<4",
+    "pyyaml>=6,<7",
+    "scipy>=1.15,<2",
+]
 
 [project.scripts]
 thesis-portfolio = "thesis_portfolio.cli:main"

@@ -1,0 +1,137 @@
+[
+  {
+    "success": true,
+    "nll": -3413.8433993809613,
+    "iterations": 8,
+    "scale": 0.008121270456053492,
+    "initial_variance": 6.59550338203673e-05,
+    "persistence": 0.5543754517969078,
+    "boundary": false,
+    "standard_errors": "not reported: boundary-aware inference deferred",
+    "attempts": [
+      {
+        "success": true,
+        "nll_scaled": 1399.4252775613122,
+        "message": "Optimization terminated successfully"
+      },
+      {
+        "success": true,
+        "nll_scaled": 1399.4252775610848,
+        "message": "Optimization terminated successfully"
+      },
+      {
+        "success": true,
+        "nll_scaled": 1399.4252775610846,
+        "message": "Optimization terminated successfully"
+      }
+    ]
+  },
+  {
+    "success": true,
+    "nll": -3021.5768552615536,
+    "iterations": 12,
+    "scale": 0.01228325659629288,
+    "initial_variance": 0.00015087839261037253,
+    "persistence": 0.6347637188026711,
+    "boundary": false,
+    "standard_errors": "not reported: boundary-aware inference deferred",
+    "attempts": [
+      {
+        "success": true,
+        "nll_scaled": 1377.9413410217487,
+        "message": "Optimization terminated successfully"
+      },
+      {
+        "success": true,
+        "nll_scaled": 1377.9413410217771,
+        "message": "Optimization terminated successfully"
+      },
+      {
+        "success": true,
+        "nll_scaled": 1377.9413410217446,
+        "message": "Optimization terminated successfully"
+      }
+    ]
+  },
+  {
+    "success": true,
+    "nll": -2767.7149777252753,
+    "iterations": 16,
+    "scale": 0.015467209798318811,
+    "initial_variance": 0.00023923457894520943,
+    "persistence": 0.45945010122548535,
+    "boundary": false,
+    "standard_errors": "not reported: boundary-aware inference deferred",
+    "attempts": [
+      {
+        "success": true,
+        "nll_scaled": 1401.3180150392393,
+        "message": "Optimization terminated successfully"
+      },
+      {
+        "success": true,
+        "nll_scaled": 1401.3180150387104,
+        "message": "Optimization terminated successfully"
+      },
+      {
+        "success": true,
+        "nll_scaled": 1401.318015039064,
+        "message": "Optimization terminated successfully"
+      }
+    ]
+  },
+  {
+    "success": true,
+    "nll": -2501.4329895178867,
+    "iterations": 11,
+    "scale": 0.020513919710144345,
+    "initial_variance": 0.00042082090187424876,
+    "persistence": 0.752222829586861,
+    "boundary": false,
+    "standard_errors": "not reported: boundary-aware inference deferred",
+    "attempts": [
+      {
+        "success": true,
+        "nll_scaled": 1385.2186234922247,
+        "message": "Optimization terminated successfully"
+      },
+      {
+        "success": true,
+        "nll_scaled": 1385.2186234921041,
+        "message": "Optimization terminated successfully"
+      },
+      {
+        "success": true,
+        "nll_scaled": 1385.2186234921044,
+        "message": "Optimization terminated successfully"
+      }
+    ]
+  },
+  {
+    "success": true,
+    "nll": -2347.0173691697883,
+    "iterations": 14,
+    "scale": 0.023913579281515725,
+    "initial_variance": 0.0005718592740533382,
+    "persistence": 0.6805979841037956,
+    "boundary": false,
+    "standard_errors": "not reported: boundary-aware inference deferred",
+    "attempts": [
+      {
+        "success": true,
+        "nll_scaled": 1386.2914414480847,
+        "message": "Optimization terminated successfully"
+      },
+      {
+        "success": true,
+        "nll_scaled": 1386.2914414480695,
+        "message": "Optimization terminated successfully"
+      },
+      {
+        "success": true,
+        "nll_scaled": 1386.2914414481602,
+        "message": "Optimization terminated successfully"
+      }
+    ]
+  }
+]

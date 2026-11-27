@@ -1,0 +1,25 @@
+# Demonstration parameters, not calibrated assets or final thesis assumptions.
+schema_version = 1
+name = "gaussian_smoke"
+seed = 20261030
+replications = 3
+history_observations = 1000
+optimization_scenarios = 2000
+evaluation_observations = 252
+periods_per_year = 252
+comparison_modes = ["independent", "controlled"]
+risk_aversion = 5.0
+confidence = 0.95
+loss_threshold = 0.02
+
+[market]
+asset_names = ["Asset_A", "Asset_B", "Asset_C", "Asset_D"]
+# Daily arithmetic simple returns in decimal units.
+mean = [0.0002, 0.0003, 0.0004, 0.0005]
+volatility = [0.008, 0.012, 0.016, 0.020]
+correlation = [
+  [1.0, 0.3, 0.2, 0.1],
+  [0.3, 1.0, 0.4, 0.2],
+  [0.2, 0.4, 1.0, 0.5],
+  [0.1, 0.2, 0.5, 1.0],
+]

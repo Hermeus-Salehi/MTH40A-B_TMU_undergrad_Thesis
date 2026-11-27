@@ -1,0 +1,13 @@
+{
+  "status": "completed",
+  "research_status": "provisional",
+  "forecast_counts": [
+    10000,
+    20000
+  ],
+  "evaluation_counts": [
+    25000,
+    50000
+  ],
+  "adequacy": "not certified"
+}

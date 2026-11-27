@@ -1,0 +1,20 @@
+{
+  "status": "completed",
+  "research_status": "provisional",
+  "selection": {
+    "selected_n": 1000,
+    "status": "provisional_reference_not_calibrated",
+    "reason": "Recovery adequacy criteria require researcher review; no automatic success claim.",
+    "fits": 8,
+    "failed_fits": 0
+  },
+  "seeds": [
+    20261127
+  ],
+  "lengths": [
+    300,
+    600,
+    1000,
+    1200
+  ]
+}

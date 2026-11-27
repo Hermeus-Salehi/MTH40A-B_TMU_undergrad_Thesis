@@ -1,0 +1,697 @@
+# MILESTONE 5 REVISED GRANULAR COMMENT ROADMAP
+# Basis: M4,5 revisions.docx, research design revision V2.0, 27 November 2026.
+# Status: implementation roadmap for review; no research code or results produced.
+#
+# WHAT THIS REVISION REPLACES
+# The active target is r_star derived from exact ERC for each fitted model and run.
+# It is not a user-entered universal percentage. This implements the new methodology.
+# All three strategies share that fitted target within the same model/run.
+# Targets may differ across fitted families and oracle markets; report those differences.
+# No independent utility, return floor, or approximate risk-budgeting method is active.
+# The former unresolved ERC choice and oracle-information optimization branch are removed.
+#
+# EXPERIMENT
+# One chronological observed history per oracle run, no discarded prefix.
+# The forecasting layer sees observed returns and public settings only.
+# GARCH/GJR means and variance coefficients are fitted by conditional Gaussian MLE.
+# Estimate constant innovation correlation from aligned fitted standardized residuals.
+# Simulate alternative 252-day futures from the fitted endpoint using fresh forecast shocks.
+# Aggregate each asset's own daily simple returns before constructing portfolios.
+# Choose initial capital weights once and hold the asset quantities for the year.
+# Freeze weights and forecast risk thresholds before drawing conditional oracle futures.
+# Oracle futures start from the true endpoint with fresh evaluation shocks.
+# All strategies and fitted families on one oracle run share its held-out terminal scenarios.
+#
+# MATHEMATICAL CONVENTIONS
+# r_t = mu + epsilon_t; epsilon_t = sqrt(h_t) * z_t, elementwise.
+# GARCH: h_next = omega + alpha * epsilon_t**2 + beta * h_t.
+# GJR: h_next additionally includes gamma * epsilon_t**2 * I(epsilon_t < 0).
+# With symmetric standard Gaussian innovations, p_GARCH = alpha + beta;
+# p_GJR = alpha + beta + gamma/2; long-run variance = omega / (1 - p).
+# Initialize the observed history at long-run variance; initialize futures at the next
+# variance calculated from the final observed residual and its associated variance.
+# Annual asset return: X[m,i] = product_t(1 + r[m,t,i]) - 1.
+# Buy-and-hold annual portfolio return: X @ weights; annual loss: -X @ weights.
+# Annual fitted mean and covariance are calculated from the same X_opt for all strategies.
+# Exact ERC: weights_i * (Sigma @ weights)_i / (weights.T @ Sigma @ weights) = 1/A.
+# With positive-definite covariance, positive budgets, and standard long-only unit budget,
+# the normalized exact ERC solution is unique. Its mean is the maximum over that
+# singleton feasible ERC set; no separate return/risk trade-off is introduced.
+# r_star = mu_annual_hat @ weights_erc.
+# Markowitz: minimize annual variance subject to mu_annual_hat @ weights = r_star.
+# CVaR: minimize annual scenario tail loss subject to the same equality.
+# Equal fitted means do not imply equal realized or oracle expected returns.
+# Compounded annual portfolios are not covered by the daily Gaussian VaR/CVaR formula.
+#
+# PROVISIONAL SETTINGS AND LIMITATIONS
+# Keep original daily four-asset M4 source and results recoverable and separately runnable.
+# The five-asset pilot, equicorrelation 0.20, counts, and stress values are provisional.
+# Preserve source dimensionless dynamics while scaling omega for target daily variance.
+# Source-exact recovery fixtures retain source model units; they are not automatically
+# investable decimal-return histories and must not be fed to annual wealth calculations.
+# Apply the minus-100-percent stopping rule to investable daily decimal simple-return paths.
+# Never clip, delete, resample, or silently switch return conventions after invalid paths.
+# Matching daily means and long-run variances does not match full marginal distributions.
+# Fixed innovation correlation does not imply identical unconditional return correlations.
+# GARCH/GJR pilot persistence differs; disclose this rather than claiming isolated asymmetry.
+# Stationarity and finite variance alone do not ensure every higher-order diagnostic is valid.
+# Keep statistical diagnostics distinct from deterministic assertions; do not seek favorable seeds.
+# No full cross-family grid, copula extension, rebalancing, or M7 replication campaign is added.
+#
+# EXECUTION ORDER AND DEPENDENCIES
+# This is the M5 list. Annual M4 migration is a separately identified prerequisite,
+# not permission to modify or execute the supplied M4 notebook during this planning request.
+# First preserve daily M4 and prepare a small separately labelled annual Gaussian smoke run.
+# Tasks 69-91 define/test reusable engines and estimators using small smoke fixtures.
+# Task 91A performs source-exact recovery, freezes N, then creates fresh production
+# histories and refits through the same observation-only functions. Earlier smoke
+# artifacts remain separate and are not reused as production results.
+# Then run 92-98 for fitted annual forecasts and ERC-first portfolio selection.
+# The notebook places Task 101A.1-101A.9 after 98 and BEFORE opening evaluation.
+# Finalize forecast count and allocations without examining oracle outcomes.
+# Run 99-100 for conditional oracle evaluation; then 101A.10-101A.12 compares evaluation
+# counts with those weights fixed. Run 101 comparisons and stress only
+# after the baseline works; each stress run follows the same forecast/freeze/evaluate order.
+# Finish with 102-103 for figures, artifacts, and clean-kernel validation.
+# Recompute compatible annual M4 using the selected common N before final comparisons.
+#
+# CELL CONTRACT
+# Each numbered line denotes exactly one future code cell, not completed implementation.
+# Section/task headings and prose are not additional code blocks.
+# Each implemented block receives a Markdown explanation of objective, intuition,
+# equations, precise Inputs and Created/Outputs, followed by commented code and verification.
+# A complete function definition occupies one cell; its internal arithmetic is explained
+# inside that cell rather than spread across invalid partial Python definitions.
+# The task-level Inputs/Created/Outputs below identify dependencies; refine variable-level
+# inputs and outputs when implementing each approved block.
+# Stop after each implemented block for execution, questions, and approval.
+#
+# SHARED SETUP
+# Question: Which configuration and existing validated helpers make the revised annual experiment reproducible?
+# Approach: Separate public fitting settings from oracle truth and register only the approved ERC-equality annual design.
+#
+# TASK M5.S Shared configuration and annual Gaussian prerequisites
+# Inputs: revised methodology, existing M4 helpers and approved or labelled provisional settings | Created/Outputs: public_config, privileged_oracle_config, run_plan, validation_registry
+# M5.S.1. Register the archived daily M4 notebook and its checksum without executing or changing it.
+# M5.S.2. Register the separate annual M4 comparator and its compatibility requirements.
+# M5.S.3. Load the explicitly reusable M4 matrix, ERC, minimum-variance, CVaR, and risk-metric helpers in sequential notebook order.
+# M5.S.4. Record Python and dependency versions used by the eventual implementation.
+# M5.S.5. Create a public experiment configuration containing horizon, counts, units, constraints, and fitting options.
+# M5.S.6. Create a separate privileged oracle configuration containing true coefficients, states, and history/evaluation seeds.
+# M5.S.7. Record H = 252 and buy-and-hold as the active horizon and trading policy.
+# M5.S.8. Register the provisional five-asset order and distinguish it from the archived four-asset daily baseline.
+# M5.S.9. Record the provisional oracle daily means [0.0002, 0.0003, 0.0004, 0.0005, 0.0006].
+# M5.S.10. Record the provisional oracle daily volatility targets [0.008, 0.012, 0.016, 0.020, 0.024].
+# M5.S.11. Record baseline equicorrelation 0.20 as a provisional oracle setting, not a fitted-model input.
+# M5.S.12. Register the history grid 300, 600, 1200 with optional 1000 reference.
+# M5.S.13. Register separate smoke, optimization-path, and evaluation-path counts; label 10000/50000 as pilot defaults.
+# M5.S.14. Record 95% optimization confidence and 95%/99% reporting confidences as provisional settings.
+# M5.S.15. Register common long-only unit-budget constraints and equal positive risk budgets.
+# M5.S.16. Set the sole active portfolio policy to exact ERC followed by equality-constrained Markowitz and CVaR.
+# M5.S.17. Reject active independent-utility, return-floor, approximate-ERC, and externally fixed target modes.
+# M5.S.18. Define stable stream identifiers for calibration, production history, forecast, evaluation, and diagnostics.
+# M5.S.19. Declare the path axes as (scenario, day, asset) and terminal-return axes as (scenario, asset).
+# M5.S.20. Declare a batching policy that retains terminal growth factors and only a small reserved subset of full future paths.
+# M5.S.21. Declare numerical tolerances, statistical lag settings, multiple-test policy, and a separate status for unresolved calibration adequacy.
+# M5.S.22. Initialize separate records for deterministic checks, statistical findings, failed fits, and provisional choices.
+#
+# PART A GARCH ORACLE ENGINE
+# Question: Can the specified dynamics generate one correctly indexed chronological history?
+# Approach: Define the source fixtures and scaled pilot, then validate the recurrence, observation export, and diagnostic behavior.
+#
+# TASK M5.69 Define the true GARCH parameter specification
+# Inputs: Approved Rubtsov example and asset order  |  Created/Outputs: oracle_garch_config
+# M5.69.1. Read the source-derived GARCH fixture specification from the revision document.
+# M5.69.2. Record the cited Rubtsov source location and distinguish transcribed values from independently verified source values.
+# M5.69.3. Define the source-exact section 5 fixture with omega = 0.0001, alpha = 0.20, beta = 0.50.
+# M5.69.4. Record source-exact fixture units without interpreting them automatically as decimal investable returns.
+# M5.69.5. Read the provisional five-asset oracle means in the common asset order.
+# M5.69.6. Read the provisional five-asset target daily variances.
+# M5.69.7. Assign source dimensionless GARCH dynamics alpha = 0.20 and beta = 0.50 to the scaled pilot assets.
+# M5.69.8. Calculate pilot omega_i = target_variance_i * (1 - alpha_i - beta_i).
+# M5.69.9. Set the GARCH gamma vector to zero.
+# M5.69.10. Construct the provisional constant equicorrelation matrix from its recorded value.
+# M5.69.11. Display source-exact and scaled parameter specifications with units and provenance.
+# M5.69.12. Store the true parameter record in privileged oracle storage only.
+#
+# TASK M5.70 Validate the true GARCH parameters
+# Inputs: oracle_garch_config  |  Created/Outputs: persistence, h_bar, validation
+# M5.70.1. Verify per-asset parameter dimensions and asset order.
+# M5.70.2. Reject missing or non-finite true parameters.
+# M5.70.3. Require omega > 0, alpha >= 0, and beta >= 0.
+# M5.70.4. Calculate persistence alpha + beta.
+# M5.70.5. Require persistence below one for the active stationary experiment.
+# M5.70.6. Calculate long-run variance omega / (1 - alpha - beta).
+# M5.70.7. Check the scaled pilot long-run variances against its target daily variances.
+# M5.70.8. Record the source-exact fixture variance separately from the scaled pilot variance.
+# M5.70.9. Test that inadmissible parameter fixtures are rejected with informative messages.
+#
+# TASK M5.71 Initialize one chronological oracle timeline
+# Inputs: N, h_bar, initialization policy  |  Created/Outputs: oracle_initial_state, time_index
+# M5.71.1. Read the history length for the current smoke, calibration, or production phase.
+# M5.71.2. Validate the history length as a positive integer.
+# M5.71.3. Set the active discarded-prefix count to zero.
+# M5.71.4. Create N chronological dates from -N+1 through zero.
+# M5.71.5. Initialize true variance at the documented long-run mean.
+# M5.71.6. Specify that the first residual is drawn using the initial variance, before any lagged update.
+# M5.71.7. Record that all generated history rows will be retained.
+#
+# TASK M5.72 Generate constant-correlated oracle innovations
+# Inputs: true correlation, oracle history RNG  |  Created/Outputs: Z_oracle
+# M5.72.1. Validate the true innovation correlation matrix for shape and finite entries.
+# M5.72.2. Check symmetry, unit diagonal, and admissible correlation entries.
+# M5.72.3. Check eigenvalues and the chosen positive-definite or semidefinite factorization policy.
+# M5.72.4. Calculate the correlation factor.
+# M5.72.5. Verify that the factor reconstructs the prescribed matrix.
+# M5.72.6. Initialize the private oracle-history random stream.
+# M5.72.7. Draw an (N, A) array of independent standard normal values.
+# M5.72.8. Transform the draws into contemporaneously correlated innovations.
+# M5.72.9. Check innovation shape and finite values.
+# M5.72.10. Record empirical innovation correlations as a statistical diagnostic in oracle storage.
+#
+# TASK M5.73 Implement the GARCH variance recursion
+# Inputs: previous ε, h and ω, α, β  |  Created/Outputs: garch_variance_step
+# M5.73.1. Define one complete GARCH variance-step function with explicit previous residual, previous variance, and coefficient arguments.
+# M5.73.2. Construct a small scalar fixture with a hand-calculated next variance.
+# M5.73.3. Check the scalar function output against that known answer.
+# M5.73.4. Construct an asset-vector fixture using independently calculated scalar answers.
+# M5.73.5. Check vectorized function output against the scalar answers.
+# M5.73.6. Verify that the function leaves all input arrays unchanged.
+# M5.73.7. Verify informative rejection of nonpositive or non-finite next variance.
+#
+# TASK M5.74 Simulate the single multivariate GARCH history
+# Inputs: oracle initial state, Z_oracle, coefficients  |  Created/Outputs: oracle_history_full, true_h, true_eps
+# M5.74.1. Define the chronological GARCH-history simulator with complete recursion inside one function cell.
+# M5.74.2. Generate the initial smoke history using the recorded initial state and innovations.
+# M5.74.3. Check the returned history, residual, and variance shapes.
+# M5.74.4. Verify residual = sqrt(variance) * innovation at matching dates.
+# M5.74.5. Verify observed return = true mean + residual.
+# M5.74.6. Extract the last true residual and its associated conditional variance.
+# M5.74.7. Store the full latent arrays and terminal state in the privileged record.
+# M5.74.8. Verify exact replay with identical parameters, innovations, and initial state.
+#
+# TASK M5.75 Select the observable estimation window
+# Inputs: oracle_history_full, N  |  Created/Outputs: observed_history, true_endpoint
+# M5.75.1. Select all N observed returns without discarding a prefix.
+# M5.75.2. Attach chronological dates ending at time zero.
+# M5.75.3. Attach the common ordered asset identifiers.
+# M5.75.4. Export a copy containing only observed returns, dates, asset labels, and public return-unit metadata.
+# M5.75.5. Verify the observable export contains exactly N rows and no future dates.
+# M5.75.6. Verify the observable export contains no oracle coefficients, seeds, innovations, or latent variances.
+# M5.75.7. Verify that the stored true endpoint matches the final history row without resetting its variance.
+#
+# TASK M5.76 Verify the generated volatility recursion
+# Inputs: oracle latent history  |  Created/Outputs: recursion_checks
+# M5.76.1. Check finite observed returns and true residuals.
+# M5.76.2. Check positive finite conditional variances.
+# M5.76.3. Recompute all lagged GARCH variance updates from the stored previous states.
+# M5.76.4. Check the recomputed variances against the recorded path.
+# M5.76.5. Test the zero-alpha, zero-beta constant-variance limit with consistent initial variance.
+# M5.76.6. Check that the constant-variance fixture reproduces Gaussian returns using identical innovations.
+# M5.76.7. Detect daily decimal simple returns at or below minus one in investable pilot runs.
+# M5.76.8. Verify that invalid investable paths stop the run without clipping, deletion, or resampling.
+# M5.76.9. Record deterministic test outcomes separately from distribution diagnostics.
+#
+# TASK M5.77 Check unconditional variance and initialization
+# Inputs: true h, h_bar, diagnostic RNG  |  Created/Outputs: variance_comparison
+# M5.77.1. Calculate time-averaged conditional variance by asset.
+# M5.77.2. Calculate the sample variance of centered true residuals.
+# M5.77.3. Calculate signed differences from theoretical long-run variance.
+# M5.77.4. Generate prespecified reserved diagnostic histories if uncertainty assessment is needed.
+# M5.77.5. Estimate diagnostic uncertainty across independent histories rather than treating squared daily returns as IID.
+# M5.77.6. Assemble the theoretical-versus-observed variance comparison.
+# M5.77.7. Report finite-history initialization sensitivity only as a separate diagnostic if required.
+# M5.77.8. Record statistical discrepancies without modifying or lengthening the fitting history after seeing favorable results.
+#
+# TASK M5.78 Measure volatility clustering in raw history
+# Inputs: observed_history  |  Created/Outputs: raw_clustering_table
+# M5.78.1. Calculate the observed-history sample mean by asset.
+# M5.78.2. Center observed returns using those sample means.
+# M5.78.3. Square the centered observations.
+# M5.78.4. Read the prespecified ACF lag grid.
+# M5.78.5. Calculate return autocorrelations.
+# M5.78.6. Calculate squared-centered-return autocorrelations.
+# M5.78.7. Check the ACF implementation against a small known sequence.
+# M5.78.8. Record missing or undefined ACF values explicitly for insufficient or constant data.
+# M5.78.9. Assemble the asset-by-lag clustering table without requiring positive sample ACF in every run.
+#
+# TASK M5.79 Check the oracle innovation structure
+# Inputs: privileged ε and h  |  Created/Outputs: oracle_innovation_diagnostics
+# M5.79.1. Recover true standardized innovations from the privileged residual and variance arrays.
+# M5.79.2. Check numerical agreement with the stored oracle innovations.
+# M5.79.3. Calculate their empirical contemporaneous correlation.
+# M5.79.4. Calculate their serial autocorrelations.
+# M5.79.5. Calculate serial autocorrelations of their squares.
+# M5.79.6. Calculate prespecified Ljung-Box statistics and reference p-values.
+# M5.79.7. Record sample sizes, lag choices, and the multiple-testing convention.
+# M5.79.8. Verify these diagnostic objects are absent from the fitter's input record.
+#
+# TASK M5.80 Visualize the GARCH oracle
+# Inputs: observed returns, privileged h, clustering table  |  Created/Outputs: GARCH diagnostic figures
+# M5.80.1. Select the common historical display interval.
+# M5.80.2. Plot observed GARCH returns with time zero identified.
+# M5.80.3. Plot true conditional volatility on aligned dates in a researcher-only panel.
+# M5.80.4. Plot squared-return and squared-oracle-innovation ACF values.
+# M5.80.5. Label history length, units, initialization, and asset identifiers.
+# M5.80.6. Register the figures and their underlying data with the run identifier.
+#
+# PART B GJR ORACLE ENGINE
+# Question: Does the asymmetric recursion produce the prescribed response to negative shocks?
+# Approach: Extend the validated engine with the centered-shock sign term and verify nesting and asymmetry identities.
+#
+# TASK M5.81 Define the true GJR-GARCH specification
+# Inputs: source §8 coefficients and pilot scaling  |  Created/Outputs: oracle_gjr_config
+# M5.81.1. Record the section 8 GJR source and its original units.
+# M5.81.2. Define the source-exact fixture omega = 0.02, alpha = 0.03, beta = 0.90, gamma = 0.06.
+# M5.81.3. Record the mapping from the notes' lambda coefficient to gamma.
+# M5.81.4. Assign the source dimensionless GJR dynamics to the provisional pilot assets.
+# M5.81.5. Calculate the implied GJR persistence alpha + beta + gamma/2.
+# M5.81.6. Calculate scaled pilot omega_i = target_variance_i * (1 - persistence_i).
+# M5.81.7. Apply any explicit unit conversion to means and variance quantities consistently.
+# M5.81.8. Register the shared true means and provisional innovation correlation.
+# M5.81.9. Display the source-exact and scaled GJR specifications separately.
+# M5.81.10. Store the true GJR configuration in privileged storage.
+#
+# TASK M5.82 Validate the true GJR parameters
+# Inputs: oracle_gjr_config  |  Created/Outputs: GJR persistence, h_bar
+# M5.82.1. Check GJR parameter dimensions and finite values.
+# M5.82.2. Require omega > 0, alpha >= 0, beta >= 0, and alpha + gamma >= 0.
+# M5.82.3. Check gamma >= 0 for the chosen negative-shock example.
+# M5.82.4. Calculate alpha + beta + gamma/2 under symmetric unit-variance Gaussian innovations.
+# M5.82.5. Require persistence below one.
+# M5.82.6. Calculate theoretical long-run variance.
+# M5.82.7. Check pilot long-run variance against the common target variance.
+# M5.82.8. Record that pilot GARCH persistence is 0.70 and pilot GJR persistence is 0.96; they are not matched.
+# M5.82.9. Test that invalid GJR parameter inputs are rejected explicitly.
+#
+# TASK M5.83 Implement the asymmetric variance update
+# Inputs: previous ε, h, GJR coefficients  |  Created/Outputs: gjr_variance_step
+# M5.83.1. Define one complete GJR variance-step function using the sign of the previous centered residual.
+# M5.83.2. Check its scalar output against a hand-computed asymmetric example.
+# M5.83.3. Check its vector output against independently calculated scalar results.
+# M5.83.4. Verify a zero residual adds no shock term.
+# M5.83.5. Verify gamma = 0 reproduces GARCH on identical inputs.
+# M5.83.6. Verify residual-sign handling when the mean and uncentered return have different signs.
+# M5.83.7. Verify nonpositive or non-finite updates are reported without silent clipping.
+#
+# TASK M5.84 Test positive versus negative shocks
+# Inputs: fixed previous h, equal shock magnitudes  |  Created/Outputs: news-impact table and plot
+# M5.84.1. Choose a fixed previous variance and a symmetric residual grid.
+# M5.84.2. Calculate GARCH responses to positive residuals.
+# M5.84.3. Calculate GARCH responses to equal-magnitude negative residuals.
+# M5.84.4. Calculate GJR responses to positive residuals.
+# M5.84.5. Calculate GJR responses to equal-magnitude negative residuals.
+# M5.84.6. Check that the GJR negative-minus-positive response equals gamma * residual_magnitude**2.
+# M5.84.7. Check GARCH symmetry and the disappearance of asymmetry when gamma = 0.
+# M5.84.8. Plot the two news-impact curves with declared residual and variance units.
+# M5.84.9. Register the numeric shock-response table and figure.
+#
+# TASK M5.85 Simulate the single GJR oracle history
+# Inputs: GJR config, history RNG  |  Created/Outputs: GJR observed history, latent endpoint
+# M5.85.1. Define the GJR-history simulator using the same axis and timing conventions as GARCH.
+# M5.85.2. Initialize a separate GJR smoke-history stream.
+# M5.85.3. Construct the initial variance and N-date correlated innovations.
+# M5.85.4. Generate the full GJR smoke history.
+# M5.85.5. Export all N observed rows using the observation-only interface.
+# M5.85.6. Store the GJR true endpoint and latent history privately.
+# M5.85.7. Record any deliberately shared random numbers across oracle-market comparisons.
+#
+# TASK M5.86 Validate the GJR history
+# Inputs: GJR latent arrays and observations  |  Created/Outputs: GJR diagnostic report
+# M5.86.1. Check GJR return, residual, and variance shapes and time alignment.
+# M5.86.2. Check positive finite variances and finite observations.
+# M5.86.3. Recompute each asymmetric variance update and compare it with the stored value.
+# M5.86.4. Check the investable daily-simple-return boundary under the declared stopping policy.
+# M5.86.5. Check the gamma = 0 path equivalence against GARCH using identical shocks.
+# M5.86.6. Check the fully constant-variance GJR limit.
+# M5.86.7. Compare observed mean variance with the theoretical long-run variance using the declared diagnostic method.
+# M5.86.8. Calculate squared-return and standardized-innovation diagnostics.
+# M5.86.9. Plot the aligned GJR historical return and conditional-volatility panels.
+# M5.86.10. Register the GJR deterministic checks and statistical findings.
+#
+# PART C INFORMATION BOUNDARY AND ESTIMATION
+# Question: What can a forecasting model learn from the single observed timeline?
+# Approach: Reserve oracle evaluation privately and fit means, variance parameters, and residual correlation from observations only.
+#
+# TASK M5.87 Prepare GARCH-market data and held-out evaluation protocol
+# Inputs: GARCH observed history and true endpoint  |  Created/Outputs: run record, reserved eval stream
+# M5.87.1. Register the GARCH smoke-run history identifier and information cutoff.
+# M5.87.2. Expose only its observation record to the forecasting layer.
+# M5.87.3. Reserve the private oracle evaluation random stream without drawing evaluation returns.
+# M5.87.4. Store the true endpoint in the privileged evaluation record.
+# M5.87.5. Register H = 252 and the evaluation scenario count for the current phase.
+# M5.87.6. Record that evaluation futures continue from the true endpoint rather than a new unconditional initialization.
+# M5.87.7. Reserve common evaluation scenario identifiers for every strategy and forecasting family in this oracle run.
+#
+# TASK M5.88 Prepare GJR-market data and held-out evaluation protocol
+# Inputs: GJR observed history and true endpoint  |  Created/Outputs: run record, reserved eval stream
+# M5.88.1. Register the GJR smoke-run history identifier and information cutoff.
+# M5.88.2. Expose only its observation record to the forecasting layer.
+# M5.88.3. Reserve the private GJR oracle evaluation stream without drawing evaluation returns.
+# M5.88.4. Store the true GJR endpoint separately from public observations.
+# M5.88.5. Check that GARCH and GJR experiments use comparable units, horizon, and trading policy.
+# M5.88.6. Register the initial required combinations: matched-family forecasting and a Gaussian forecaster on each dynamic-market history.
+# M5.88.7. Exclude the full cross-family forecasting grid from the initial active run plan.
+#
+# TASK M5.89 Construct training-only Gaussian estimates and fit inputs
+# Inputs: observed_history  |  Created/Outputs: mu_daily_hat, cov_daily_hat, fit_inputs
+# M5.89.1. Define the observation-input validator for dates, asset order, shape, units, and finite values.
+# M5.89.2. Test rejection of a fitting record containing future dates or privileged latent-state fields.
+# M5.89.3. Define the reusable Gaussian fitting function with observed returns and public options only.
+# M5.89.4. Calculate daily sample means from each current observed history.
+# M5.89.5. Calculate daily sample covariance using the declared denominator.
+# M5.89.6. Check estimated covariance symmetry, semidefiniteness, and conditioning.
+# M5.89.7. Record any allowed regularization explicitly; never silently repair a covariance.
+# M5.89.8. Prepare each asset's ordered observed series for volatility fitting.
+# M5.89.9. Label Gaussian daily moments as forecasting inputs, not annual optimizer moments.
+#
+# TASK M5.90 Prepare the residual and dependence estimation interface
+# Inputs: observed history, fitted model contract  |  Created/Outputs: residual/correlation helpers
+# M5.90.1. Define residual extraction as observations minus fitted conditional means.
+# M5.90.2. Define standardized residual extraction using fitted conditional standard deviations.
+# M5.90.3. Define alignment of residual columns on common valid observed dates.
+# M5.90.4. Define constant innovation-correlation estimation from aligned standardized residuals.
+# M5.90.5. Define estimated-correlation validation including shape, symmetry, unit diagonal, spectrum, and conditioning.
+# M5.90.6. Test residual extraction against a small hand-computed fixture.
+# M5.90.7. Test date alignment against a fixture with deliberately mismatched asset dates.
+# M5.90.8. Test correlation validation using valid and invalid matrices.
+#
+# TASK M5.91 Fit GARCH and GJR-GARCH by MLE (mandatory)
+# Inputs: observed history, chosen family, public options  |  Created/Outputs: fitted_market_model, fit diagnostics
+# M5.91.1. Define the complete univariate fitting interface with observed series, model family, and public options only.
+# M5.91.2. Specify a constant estimated mean and conditional Gaussian likelihood in the fitting configuration.
+# M5.91.3. Define the training-only initial variance or backcast convention, including first-observation likelihood treatment.
+# M5.91.4. Define the conditional-variance filter used to evaluate a candidate parameter vector.
+# M5.91.5. Define Gaussian per-observation negative log-likelihood contributions.
+# M5.91.6. Define the summed likelihood objective under the documented observation convention.
+# M5.91.7. Verify filter values against a hand-computed short history.
+# M5.91.8. Verify likelihood contributions and their sum against a hand-computed fixture.
+# M5.91.9. Define the numerical scaling policy using observations or public options, never true asset volatility.
+# M5.91.10. Define the conversions for fitted means, residuals, omega, and variance states back to original units.
+# M5.91.11. Verify scaling conversions on a deterministic fixture.
+# M5.91.12. Configure GARCH and GJR coefficient constraints and deterministic optimizer starting rules.
+# M5.91.13. Implement the complete MLE wrapper using the approved numerical backend and explicit optimizer options.
+# M5.91.14. Run per-asset GARCH fits for the GARCH smoke history.
+# M5.91.15. Run per-asset GJR fits for the GJR smoke history.
+# M5.91.16. Capture likelihood values, convergence status, parameter estimates, and available standard errors.
+# M5.91.17. Validate fitted parameter admissibility and boundary behavior.
+# M5.91.18. Record unsuccessful fits without replacing them using true parameters or favorable resimulation.
+# M5.91.19. Extract fitted conditional means and observed residuals.
+# M5.91.20. Extract fitted conditional variances on the observed dates.
+# M5.91.21. Calculate and align fitted standardized residuals.
+# M5.91.22. Estimate the constant forecast innovation correlation from those residuals.
+# M5.91.23. Validate the estimated correlation under the declared regularization policy.
+# M5.91.24. Calculate ACF values for standardized residuals and their squares.
+# M5.91.25. Calculate declared Ljung-Box diagnostics and optional ARCH-LM diagnostics if selected.
+# M5.91.26. Label fitted-residual tests with their estimation and reference-distribution limitations.
+# M5.91.27. Define the market-level fitting wrapper that returns ordered fitted assets, estimated correlation, states, and diagnostics.
+# M5.91.28. Build the fitted market artifacts for the smoke histories.
+# M5.91.29. Test that changing hidden metadata while holding observed inputs fixed leaves fitted outputs unchanged.
+#
+# CALIBRATION BEFORE PRODUCTION
+# Question: How much history is sufficiently informative for the proposed estimation procedure?
+# Approach: Compare nested prefixes on prespecified source fixtures, then freeze a common N and validate on fresh production histories.
+#
+# TASK M5.91A Recover source parameters and select N before production
+# Inputs: source-exact fixtures, prefix grid, public fitting options | Created/Outputs: recovery table, frozen N/status, fresh production histories and fitted market artifacts
+# M5.91A.1. Register source-exact GARCH and GJR parameter-recovery fixtures in their original model units.
+# M5.91A.2. Register the prespecified calibration seeds without exposing them to the fitter.
+# M5.91A.3. Read the candidate prefix lengths 300, 600, 1200 and optional 1000 reference.
+# M5.91A.4. Generate one longest chronological calibration timeline per family and registered seed.
+# M5.91A.5. Construct nested observed prefixes at each candidate length.
+# M5.91A.6. Record each prefix's own endpoint and forecast-origin date.
+# M5.91A.7. Fit the correctly specified family to every prefix using the production fitting interface.
+# M5.91A.8. Retain fit failures and boundary estimates in the recovery dataset.
+# M5.91A.9. In the researcher layer, calculate estimated-minus-true parameter errors.
+# M5.91A.10. Calculate absolute and scale-normalized parameter errors with explicit handling of zero true coefficients.
+# M5.91A.11. Calculate fitted and true persistence for every prefix.
+# M5.91A.12. Calculate fitted and true long-run variance for every prefix.
+# M5.91A.13. Record available parameter standard errors and their interpretation.
+# M5.91A.14. Compare fitted and true historical volatility on matching dates using a documented scale-normalized error.
+# M5.91A.15. Compare fitted and true next-period variance at each prefix endpoint.
+# M5.91A.16. Assemble the recovery table including fit success and residual diagnostics.
+# M5.91A.17. Plot recovery errors against historical length without dropping unfavorable seeds.
+# M5.91A.18. Record the prespecified adequacy criteria or explicitly mark them unapproved.
+# M5.91A.19. Select the shortest common adequate N when those criteria support a selection.
+# M5.91A.20. If adequacy is unresolved, label a configured integration fallback such as N = 1000 as provisional rather than calibrated.
+# M5.91A.21. Freeze the common selected or provisional N before production data are generated.
+# M5.91A.22. Generate fresh production histories from the registered oracle engines using new production-history streams.
+# M5.91A.23. Export only the fresh production observation records to the fitting layer.
+# M5.91A.24. Fit the matched volatility family and Gaussian comparator on each same production history.
+# M5.91A.25. Revalidate all production fitted models and estimated correlations without consulting oracle truth for repairs.
+# M5.91A.26. Register production endpoints, observation identifiers, fitted model identifiers, and reserved evaluation streams.
+# M5.91A.27. Save the calibration manifest separately from production artifacts.
+#
+# PART C CONDITIONAL ANNUAL FORECASTS
+# Question: What annual terminal outcomes does the fitted model predict at time zero?
+# Approach: Continue from its estimated endpoint and aggregate each asset trajectory into one buy-and-hold terminal return per scenario.
+#
+# TASK M5.92 Calculate the conditional state at the forecast origin
+# Inputs: fitted parameters, last fitted ε and h  |  Created/Outputs: forecast_initial_state
+# M5.92.1. Extract the fitted residual associated with the final observed date.
+# M5.92.2. Extract the fitted conditional variance associated with that same date.
+# M5.92.3. Calculate the first future GARCH variance using the fitted coefficients and endpoint.
+# M5.92.4. Calculate the first future GJR variance using the fitted coefficients and endpoint.
+# M5.92.5. Check the manual forecasts against the fitting backend's one-step forecast where available.
+# M5.92.6. Validate forecast positivity, units, and asset order.
+# M5.92.7. Construct the diagonal matrix of first-future conditional standard deviations.
+# M5.92.8. Calculate the first conditional covariance using the estimated constant innovation correlation.
+# M5.92.9. Validate the first conditional covariance.
+# M5.92.10. Store the fitted initial future state and time-zero metadata without true states.
+#
+# TASK M5.93 Generate GARCH fitted-model future scenarios
+# Inputs: GARCH fitted state, H, Mopt, RNG  |  Created/Outputs: GARCH X_opt, annual moments
+# M5.93.1. Define the complete conditional-path simulation interface using fitted parameters, fitted state, horizon, count, and forecast RNG.
+# M5.93.2. Define the batched GARCH forecast generator with state initialized independently for every scenario.
+# M5.93.3. Define asset-level terminal aggregation as product(1 + daily_return) - 1 along the day axis.
+# M5.93.4. Verify terminal aggregation on a hand-computed multi-day, multi-asset fixture.
+# M5.93.5. Verify buy-and-hold terminal portfolio return equals weights @ asset_terminal_returns on that fixture.
+# M5.93.6. Verify the fixture distinguishes buy-and-hold from repeated daily restoration of fixed weights.
+# M5.93.7. Initialize the production forecast stream independently of oracle evaluation randomness.
+# M5.93.8. Generate GARCH forecast batches for 252 days from the fitted first-future variance.
+# M5.93.9. Check finite returns and stop on invalid daily simple returns without removing scenarios.
+# M5.93.10. Check first-future variance continuity against the state from Task 92.
+# M5.93.11. Aggregate each simulated asset trajectory into its annual terminal return.
+# M5.93.12. Retain the terminal matrix and only the prespecified subset of complete paths.
+# M5.93.13. Check terminal matrix shape and finite values.
+# M5.93.14. Calculate annual sample mean from the fitted terminal scenarios.
+# M5.93.15. Calculate annual sample covariance from the same terminal scenarios.
+# M5.93.16. Record scenario counts, horizon, sample-moment definitions, and forecast stream provenance.
+#
+# TASK M5.94 Generate GJR and Gaussian comparator futures
+# Inputs: fitted GJR/Gaussian state, same H and count  |  Created/Outputs: GJR/Gaussian X_opt and annual moments
+# M5.94.1. Define the batched GJR conditional-forecast generator using the fitted asymmetric recursion.
+# M5.94.2. Initialize a separate GJR forecast stream and record any deliberate forecast-to-forecast common random numbers.
+# M5.94.3. Simulate GJR annual futures from the fitted first-future variance.
+# M5.94.4. Simulate Gaussian comparator futures from daily moments estimated on the same observed history.
+# M5.94.5. Check forecast-path dimensions, finite returns, and the simple-return boundary.
+# M5.94.6. Aggregate GJR futures to terminal simple asset returns.
+# M5.94.7. Aggregate Gaussian comparator futures using the identical asset-level annual rule.
+# M5.94.8. Calculate GJR annual means and covariance from its terminal scenarios.
+# M5.94.9. Calculate Gaussian annual means and covariance from its terminal scenarios.
+# M5.94.10. Validate each annual covariance, including positive definiteness required by the planned exact ERC solver.
+# M5.94.11. Calculate effective tail scenario counts for optimization and reporting levels.
+# M5.94.12. Register one common annual mean vector and covariance per fitted model for use by every strategy.
+# M5.94.13. Verify all 252 future observations are retained with no forecast burn-in.
+#
+# PART D ERC FIRST AND EQUALITY CONTROL
+# Question: How do the three risk objectives allocate at the exact ERC fitted expected return?
+# Approach: Validate unique exact ERC first, freeze its annual mean, then enforce that equality in variance and CVaR minimization.
+#
+# TASK M5.95 Optimize exact ERC and determine the maximum feasible mean
+# Inputs: annual fitted μ and Σ, constraints  |  Created/Outputs: w_erc, r_star, ERC certificate
+# M5.95.1. Verify annual covariance is positive definite within the declared numerical policy.
+# M5.95.2. Verify strictly positive equal risk budgets and the standard long-only unit-budget feasible set.
+# M5.95.3. Check that no extra binding allocation constraints invalidate the uniqueness argument.
+# M5.95.4. Run the existing normalized convex ERC solver on the annual covariance.
+# M5.95.5. Recompute portfolio volatility from the returned weights.
+# M5.95.6. Recompute individual volatility risk contributions.
+# M5.95.7. Verify the contributions sum to portfolio volatility.
+# M5.95.8. Verify normalized risk shares equal 1/A within tolerance.
+# M5.95.9. Verify budget and nonnegativity constraints.
+# M5.95.10. Calculate r_star = annual_mean @ erc_weights.
+# M5.95.11. Record why the unique exact ERC allocation maximizes fitted return over the singleton feasible ERC set.
+# M5.95.12. Freeze the target for this fitted model and run.
+# M5.95.13. Stop the matched comparison if exact ERC or its uniqueness assumptions cannot be validated.
+#
+# TASK M5.96 Optimize Markowitz at the fixed ERC target
+# Inputs: annual fitted μ and Σ, r_star, w_erc  |  Created/Outputs: w_markowitz, solver diagnostics
+# M5.96.1. Verify ERC supplies a feasible witness for the common fixed-return problem.
+# M5.96.2. Configure the existing Markowitz solver to minimize annual portfolio variance.
+# M5.96.3. Set the exact equality annual_mean @ weights = r_star.
+# M5.96.4. Solve the constrained minimum-variance problem using the validated ERC allocation as a feasible start where appropriate.
+# M5.96.5. Record weights, solver status, objective value, and equality residual.
+# M5.96.6. Check the fitted Markowitz variance is no greater than ERC variance within tolerance.
+# M5.96.7. Calculate the global minimum-variance portfolio only as the specified frontier-location diagnostic.
+# M5.96.8. Calculate the global minimum-variance portfolio's fitted expected return.
+# M5.96.9. Label r_star below that return as a lower-branch equality target rather than a solver error.
+#
+# TASK M5.97 Optimize annual scenario-based CVaR
+# Inputs: X_opt, confidence, fitted annual mean, r_star | Created/Outputs: w_cvar, LP diagnostics, CVaR identity checks
+# M5.97.1. Construct one annual loss per terminal scenario using loss = -X_opt @ weights.
+# M5.97.2. Configure the sparse Rockafellar-Uryasev linear program with a free threshold variable.
+# M5.97.3. Apply the shared budget, bounds, and annual_mean @ weights = r_star equality.
+# M5.97.4. Solve the annual CVaR program at the configured optimization confidence.
+# M5.97.5. Record the returned weights, threshold, excess losses, and solver diagnostics.
+# M5.97.6. Calculate empirical CVaR independently using sorted scenario losses and fractional boundary mass.
+# M5.97.7. Verify agreement with the linear-program objective.
+# M5.97.8. Calculate ERC CVaR on the identical optimization scenarios.
+# M5.97.9. Verify optimized CVaR is no greater than ERC CVaR within tolerance.
+#
+# TASK M5.98 Verify and freeze the portfolios and forecast thresholds
+# Inputs: validated weights, X_opt, fitted annual μ/Σ  |  Created/Outputs: frozen allocation and risk forecasts
+# M5.98.1. Assemble the three portfolio weight vectors for each fitted model.
+# M5.98.2. Check finite weights, dimensions, unit budget, nonnegative bounds, and any common leverage constraint.
+# M5.98.3. Calculate achieved fitted annual means using the same annual mean vector.
+# M5.98.4. Check all three means equal this model's r_star within tolerance.
+# M5.98.5. Recheck exact ERC shares on the fitted annual covariance.
+# M5.98.6. Recheck the minimum-variance and minimum-CVaR in-sample dominance bounds relative to feasible ERC.
+# M5.98.7. Calculate fitted annual portfolio loss scenarios for each strategy.
+# M5.98.8. Calculate fitted annual VaR at each reporting confidence.
+# M5.98.9. Calculate fitted annual CVaR at each reporting confidence.
+# M5.98.10. Check CVaR >= VaR under the common loss definition.
+# M5.98.11. Freeze weights, target, thresholds, confidence levels, and scenario identifiers before evaluation is drawn.
+# M5.98.12. Run the pipeline no-leakage fixture with fixed observations and changed hidden metadata or mock future data.
+# M5.98.13. Verify training data and fitted states do not change when forecast scenario count changes.
+#
+# MONTE CARLO COUNT CHECKS
+# Question: Are annual moments, allocations, and tail metrics stable at the chosen forecast and evaluation counts?
+# Approach: Vary forecast counts before evaluation; vary evaluation counts only with selected portfolios and thresholds frozen.
+#
+# TASK M5.101A Separate forecast and evaluation Monte Carlo convergence checks — forecast counts before evaluation
+# Inputs: fixed production observations and fits, count grid, reserved forecast/evaluation streams | Created/Outputs: forecast_count_table, evaluation_count_table, provisional_count_status
+# M5.101A.1. Freeze the selected observed history and fitted parameters before testing Monte Carlo counts.
+# M5.101A.2. Register the forecast count comparison of 10000 and 20000 or a labelled smaller smoke grid.
+# M5.101A.3. Generate nested forecast scenario sets under a reproducible batching/stream policy.
+# M5.101A.4. Recalculate annual moments for each forecast count.
+# M5.101A.5. Recompute exact ERC and r_star for each forecast scenario set.
+# M5.101A.6. Solve equality-constrained Markowitz and CVaR for each count at that count's ERC-derived target.
+# M5.101A.7. Report changes in target, weights, fitted moments, and fitted tail measures together.
+# M5.101A.8. Choose or provisionally record the forecast count without using oracle outcomes to select portfolios or numerical settings.
+# M5.101A.9. Freeze the selected weights and forecast thresholds before evaluation-count checks.
+#
+# PART E CONDITIONAL ORACLE EVALUATION
+# Question: How do the frozen strategies perform on the same fresh futures of the actual simulated market?
+# Approach: Generate shared oracle futures only after selection and distinguish forecast error, realized risk, and differing model-specific targets.
+#
+# TASK M5.99 Generate and evaluate held-out conditional oracle futures
+# Inputs: true endpoint and parameters, frozen weights, eval RNG  |  Created/Outputs: X_eval, P_eval, L_eval
+# M5.99.1. Define the privileged oracle-continuation function separately from fitted-model forecasting.
+# M5.99.2. Verify that all requested allocations and ex-ante thresholds are frozen before opening the oracle evaluator.
+# M5.99.3. Calculate the oracle's first future variance from its true last residual and variance.
+# M5.99.4. Initialize the reserved oracle evaluation stream.
+# M5.99.5. Generate one shared set of 252-day conditional oracle futures per oracle run.
+# M5.99.6. Check oracle state continuity and correct simulation timing.
+# M5.99.7. Check finite evaluation paths and stop the run on invalid daily simple returns without deleting paths.
+# M5.99.8. Aggregate oracle asset paths to annual terminal simple returns.
+# M5.99.9. Assign stable shared evaluation scenario identifiers.
+# M5.99.10. Apply every frozen strategy from every required fitted family to the same X_eval rows.
+# M5.99.11. Check weighted terminal wealth against the hand-computed buy-and-hold fixture.
+# M5.99.12. Calculate annual portfolio losses as negative annual returns.
+# M5.99.13. Store paired outcomes and the prespecified small subset of complete evaluation paths.
+#
+# TASK M5.100 Calculate forecast and oracle annual risk metrics
+# Inputs: P_eval, L_eval, frozen forecast thresholds  |  Created/Outputs: annual risk table
+# M5.100.1. Calculate the mean of annual oracle portfolio returns.
+# M5.100.2. Calculate the standard deviation of annual oracle portfolio returns.
+# M5.100.3. Calculate annual oracle loss VaR at each reporting confidence.
+# M5.100.4. Calculate annual oracle loss CVaR using the declared empirical convention.
+# M5.100.5. Check oracle CVaR is no smaller than oracle VaR.
+# M5.100.6. Record fitted forecast metrics separately from oracle evaluation metrics.
+# M5.100.7. Count oracle losses exceeding each frozen fitted annual VaR threshold.
+# M5.100.8. Calculate exception frequencies and display the nominal tail probabilities.
+# M5.100.9. Calculate conditional binomial uncertainty for exceptions across independently drawn future paths.
+# M5.100.10. Record that conditional evaluation uncertainty excludes historical estimation and across-history uncertainty.
+# M5.100.11. Calculate portfolio concentration from initial capital weights.
+# M5.100.12. Calculate risk-contribution summaries with fitted and oracle covariance bases explicitly separated.
+# M5.100.13. Calculate forecast-minus-oracle risk differences.
+# M5.100.14. Report fitted target, fitted achieved mean, and oracle estimated achieved mean as separate columns.
+# M5.100.15. Record effective tail counts and inadequate-precision flags.
+# M5.100.16. Assemble the annual risk comparison table with consistent units and confidence labels.
+#
+# TASK M5.101A Separate forecast and evaluation Monte Carlo convergence checks — evaluation counts
+# Inputs: fixed production observations and fits, count grid, reserved forecast/evaluation streams | Created/Outputs: forecast_count_table, evaluation_count_table, provisional_count_status
+# M5.101A.10. Evaluate those same fixed weights on registered nested oracle scenario sets.
+# M5.101A.11. Report metric changes and conditional sampling uncertainty as evaluation count increases.
+# M5.101A.12. Record count-adequacy criteria and unresolved precision rather than claiming convergence from a single favorable change.
+#
+# TASK M5.101 Compare market regimes and forecast families
+# Inputs: M4 annual outputs, M5 annual outputs  |  Created/Outputs: comparison and attribution tables
+# M5.101.1. Validate compatibility of annual M4 and M5 asset order, N, horizon, units, constraints, and buy-and-hold policy.
+# M5.101.2. Load or register only annual Gaussian baseline results meeting those compatibility checks.
+# M5.101.3. Label each result by oracle family, forecasting family, configuration, seed, and fitted target.
+# M5.101.4. Compare the three strategies within each oracle and fitted-model combination at its shared r_star.
+# M5.101.5. Compare the Gaussian and matched volatility forecasters on the same dynamic-market history and evaluation futures.
+# M5.101.6. Report changing fitted targets alongside risk and return when comparing forecasting models.
+# M5.101.7. Separate oracle-market changes from forecasting-model changes in the comparison table.
+# M5.101.8. Report matched target daily variances and any differences in persistence or unconditional return correlations.
+# M5.101.9. Keep the daily M4 analytical benchmark separate from the compounded annual comparison.
+# M5.101.10. Register the provisional volatility-only stress with doubled daily volatility and omega multiplied by four.
+# M5.101.11. Register the provisional correlation-only stress with equicorrelation raised from 0.20 to 0.70.
+# M5.101.12. Register the combined volatility-and-correlation stress.
+# M5.101.13. Validate each stress correlation matrix and unchanged dimensionless volatility coefficients.
+# M5.101.14. After baseline validation, generate one fresh observed history per stress oracle/seed under the registered pairing policy.
+# M5.101.15. Refit the required forecasting models on each stress history using the frozen common N.
+# M5.101.16. Repeat fitted annual forecasting and ERC-first optimization for each stress configuration.
+# M5.101.17. Freeze stress allocations and thresholds before generating each shared oracle evaluation set.
+# M5.101.18. Assemble baseline and stress risk/return comparisons without assuming monotonic strategy rankings.
+#
+# VISUALIZATION AND FINAL VALIDATION
+# Question: Can every reported figure and conclusion be traced to validated experiment arrays?
+# Approach: Generate the required visual evidence, save provenance, and replay a small integrated run from a clean kernel.
+#
+# TASK M5.102 Generate the Milestone 5 visual evidence
+# Inputs: history, forecasts, fits, risk results  |  Created/Outputs: figures and comparison dashboard
+# M5.102.1. Set consistent asset colors, strategy labels, annual units, and oracle/forecast identifiers.
+# M5.102.2. Plot the chronological observed return history with its information cutoff.
+# M5.102.3. Overlay true and fitted conditional volatility in a researcher-only diagnostic panel.
+# M5.102.4. Plot before-and-after squared-return and squared-fitted-residual ACF values.
+# M5.102.5. Plot the validated GARCH and GJR news-impact curves.
+# M5.102.6. Create the true-versus-estimated parameter table in the researcher layer.
+# M5.102.7. Plot parameter-recovery errors against historical length from the calibration artifact.
+# M5.102.8. Calculate fitted conditional future quantiles from the prespecified retained path subset.
+# M5.102.9. Plot fitted future fans with time zero and the path-subset count identified.
+# M5.102.10. Calculate comparable oracle future summaries in the evaluator for separately labelled overlays.
+# M5.102.11. Plot annual initial portfolio allocations.
+# M5.102.12. Plot exact ERC risk shares and the other strategies' risk contributions on the fitted covariance.
+# M5.102.13. Generate the specified fitted annual frontier as a diagnostic using a declared feasible target grid.
+# M5.102.14. Plot the frontier with ERC, the common r_star comparison, and the GMV-location diagnostic.
+# M5.102.15. Plot fitted versus oracle annual loss distributions with VaR and CVaR markers.
+# M5.102.16. Render the comparative annual risk/return table and baseline/stress summaries.
+# M5.102.17. Assemble the primary dashboard with oracle family and forecasting family shown separately.
+# M5.102.18. Check every plotted value against its underlying result table.
+# M5.102.19. Inspect labels, scales, legend mappings, confidence levels, and clipping.
+# M5.102.20. Register figures with run, horizon, units, counts, source arrays, and model metadata.
+#
+# TASK M5.103 Save and validate the complete Stage 2 run
+# Inputs: all M5 outputs  |  Created/Outputs: manifest, validation report, reproducible run
+# M5.103.1. Create separate result locations for privileged oracle records, fitted-model artifacts, and public summaries.
+# M5.103.2. Save public configuration and explicitly labelled provisional decisions.
+# M5.103.3. Save source-exact and scaled oracle configurations with provenance and private stream metadata.
+# M5.103.4. Save calibration recovery tables, selected N, and adequacy status.
+# M5.103.5. Save observed-history identifiers and fitted parameters, states, correlations, and optimizer diagnostics.
+# M5.103.6. Save forecast and evaluation counts, stream mapping, and terminal scenario provenance.
+# M5.103.7. Save frozen portfolio weights, model-specific r_star, return-equality residuals, and exact ERC diagnostics.
+# M5.103.8. Save ex-ante annual risk forecasts and thresholds.
+# M5.103.9. Save paired oracle outcomes and annual evaluation metrics.
+# M5.103.10. Save all required figures and the figure-data index.
+# M5.103.11. Save deterministic checks separately from statistical findings and unsuccessful fits.
+# M5.103.12. Record unresolved source mapping, calibration adequacy, and numerical-count decisions honestly.
+# M5.103.13. Reload saved numeric artifacts and verify their values and metadata.
+# M5.103.14. Replay the small integrated experiment from a clean kernel using the recorded configuration.
+# M5.103.15. Verify reproducibility of observed history, fits, forecast scenarios, targets, allocations, and evaluation results.
+# M5.103.16. Run the final recurrence, scaling, no-leakage, annual-wealth, ERC, equality, and CVaR identity checks.
+# M5.103.17. Verify no legacy utility/floor mode, approximate ERC, burn-in discard, or daily rebalancing was active.
+# M5.103.18. Verify all required matched-family, shared-history Gaussian, baseline, and stress outputs are registered.
+# M5.103.19. Record production-pilot completion separately from any unresolved scientific calibration claims.
+# M5.103.20. Mark the agreed M5 scope complete only after required outputs and checks are validated.
+#
+# SUMMARY
+# Total planned code blocks: 443.
+# Shared setup: 22 blocks.
+# Tasks 69-103 plus calibration 91A and count checks 101A: 421 blocks.
+# Numbered source tasks are preserved, but their subtasks are expanded and renumbered.
+# Source document: /Users/morty/Desktop/Nuclear Launch Codes/School/MTH 40A:B Thesis/Progress/M5 - Garch1,1, GJR/M4,5 revisions.docx
+# The supplied methodology is the specification source; its imperative handoff text
+# does not override the current request to produce a plan before coding.
+# No model, fitting, simulation, optimization, or evaluation code was run for this roadmap.

@@ -1,0 +1,5 @@
+# Preserve recorded CSV bytes so published artifact checksums survive checkout.
+# csv.DictWriter uses standard CRLF records; these are valid line endings.
+*.csv -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+*.npz binary
+*.png binary

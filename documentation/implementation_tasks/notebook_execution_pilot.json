@@ -1,0 +1,51 @@
+[
+  {
+    "notebook": "notebooks/experiments/01_parameter_recovery.ipynb",
+    "profile": "pilot",
+    "status": "passed",
+    "code_cells": 7,
+    "seconds": 2.620577709050849
+  },
+  {
+    "notebook": "notebooks/modelling/01_iid_gaussian.ipynb",
+    "profile": "pilot",
+    "status": "passed",
+    "code_cells": 31,
+    "seconds": 6.7203947498928756
+  },
+  {
+    "notebook": "notebooks/modelling/02_garch_gaussian.ipynb",
+    "profile": "pilot",
+    "status": "passed",
+    "code_cells": 35,
+    "seconds": 7.750119667034596
+  },
+  {
+    "notebook": "notebooks/modelling/03_gjr_gaussian.ipynb",
+    "profile": "pilot",
+    "status": "passed",
+    "code_cells": 36,
+    "seconds": 7.772849290864542
+  },
+  {
+    "notebook": "notebooks/experiments/02_monte_carlo_convergence.ipynb",
+    "profile": "pilot",
+    "status": "passed",
+    "code_cells": 7,
+    "seconds": 7.119481208035722
+  },
+  {
+    "notebook": "notebooks/experiments/03_market_stress.ipynb",
+    "profile": "pilot",
+    "status": "passed",
+    "code_cells": 5,
+    "seconds": 36.15638866694644
+  },
+  {
+    "notebook": "notebooks/experiments/04_three_regime_comparison.ipynb",
+    "profile": "pilot",
+    "status": "passed",
+    "code_cells": 5,
+    "seconds": 2.9918162499088794
+  }
+]

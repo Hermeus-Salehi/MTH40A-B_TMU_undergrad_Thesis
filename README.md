@@ -1,5 +1,43 @@
 # MTH 40A/B thesis · Portfolio robustness and adaptability
 
+## Start with the active annual M5 research
+
+The current implementation uses independent research notebooks backed by reusable
+Python modules. It fits Gaussian, GARCH, and GJR models to one observed history,
+forecasts 252-day buy-and-hold outcomes, solves exact ERC first, and gives Markowitz
+and CVaR the same ERC-derived annual expected-return equality.
+
+**Start here:** [research notebook guide](notebooks/RESEARCH_GUIDE.md).
+The [active design](documentation/research_design.md) supersedes the daily
+methodology described in the legacy sections below. The
+[decision log](documentation/decision_log.md) records architecture changes and
+provisional settings. The original M4 notebook is unchanged and archived.
+
+```bash
+uv sync --frozen
+.venv/bin/python -m ipykernel install --prefix .venv --name thesis --display-name "Python (thesis)"
+.venv/bin/python -m pytest -q
+.venv/bin/python scripts/execute_research_notebooks.py
+```
+
+The last command runs each recipe in a fresh kernel using labelled smoke counts.
+To run a configured pilot directly:
+
+```bash
+.venv/bin/python -m thesis_portfolio.annual.experiment --profile pilot --oracle garch
+```
+
+`configs/annual/pilot.yaml` is the canonical annual run configuration. The pilot
+uses N=1000, 252 days, 10000 forecast years, and 50000 oracle evaluation years.
+N=1000 remains a provisional reference, not a certified calibration result.
+Runs save actual data, figures, diagnostic reports and provenance under distinct
+`results/<run_id>/` and `figures/<run_id>/` paths. No daily rebalancing is active.
+
+## Preserved daily infrastructure and legacy example
+
+The following sections describe the earlier daily experiment only. Its natural
+and controlled modes are retained for regression, not active M5 comparisons.
+
 How much downside risk does a portfolio retain when the market behaves differently from the model used to choose its weights? This repository provides the first computational step toward that thesis question. It runs a controlled Gaussian experiment with three long-only, fully invested strategies: Markowitz mean–variance, equal risk contribution (ERC), and conditional value-at-risk (CVaR). Each strategy learns from historical observations and faces the same subsequent market path.
 
 Part 3 of the research checklist delivers the Python package, dependency lock, experiment configurations, tests, and run records. The included Gaussian run exercises the whole process on synthetic assets. Its parameters and sample sizes are development choices. The thesis design and the mathematical conventions are documented in the [experiment specification](docs/experiment_spec.md) and [model specification](docs/model_spec.md).

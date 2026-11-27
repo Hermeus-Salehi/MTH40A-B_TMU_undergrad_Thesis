@@ -1,0 +1,47 @@
+{
+  "mathematical_backstops": {
+    "garch_scalar": true,
+    "constant_variance": true,
+    "asymmetry": true,
+    "gjr_nests_garch": true,
+    "buy_hold": true,
+    "not_daily_rebalanced": true
+  },
+  "history": {
+    "maximum_recurrence_error": 0.0,
+    "minimum_variance": 0.0001386575580770523,
+    "initialization": "long-run variance, no discarded prefix"
+  },
+  "research_status": "provisional_reference_not_calibrated",
+  "limitations": [
+    "History adequacy thresholds not approved; no claim of calibration success.",
+    "Conditional evaluation uncertainty excludes estimation uncertainty.",
+    "Model-specific ERC targets may differ across forecasting families.",
+    "Source scaling and stress values are provisional.",
+    "MLE standard errors not reported; finite-history boundary estimates are flagged."
+  ],
+  "gjr": {
+    "return_error": 0.0,
+    "forecast_sha256": "cc94f937504001ec458d6deb0706e1c4982ea9c274f6192fc2ca6878fa7e683a",
+    "minimum_forecast_eigenvalue": 0.07837129099464826,
+    "fit_boundary_flags": [
+      false,
+      false,
+      false,
+      true,
+      false
+    ]
+  },
+  "gaussian": {
+    "return_error": 5.551115123125783e-17,
+    "forecast_sha256": "9ac2ca0cc2c9796adc784e6f9cd20b4d75b3bb542a9218ab79833da4a6b0b432",
+    "minimum_forecast_eigenvalue": 0.08157155400747072,
+    "fit_boundary_flags": [
+      false,
+      false,
+      false,
+      false,
+      false
+    ]
+  }
+}

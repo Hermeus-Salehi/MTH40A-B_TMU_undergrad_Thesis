@@ -1,0 +1,135 @@
+stable_id,notebook,cell_tag,source,legacy_task_groups,purpose
+M4A.GAUSSIAN.SETUP.01,notebooks/modelling/01_iid_gaussian.ipynb,M4A.GAUSSIAN.SETUP.01,thesis_portfolio.annual,S,Import the shared research machinery
+M4A.GAUSSIAN.SETUP.02,notebooks/modelling/01_iid_gaussian.ipynb,M4A.GAUSSIAN.SETUP.02,annual.config.load_run_config,S,Load the run configuration
+M4A.GAUSSIAN.SETUP.03,notebooks/modelling/01_iid_gaussian.ipynb,M4A.GAUSSIAN.SETUP.03,annual.experiment.begin_run,103,Open a new evidence record
+M4A.GAUSSIAN.HISTORY.01,notebooks/modelling/01_iid_gaussian.ipynb,M4A.GAUSSIAN.HISTORY.01,annual.config.oracle_state,"69,70,71,72,81,82",Construct the privileged oracle
+M4A.GAUSSIAN.HISTORY.02,notebooks/modelling/01_iid_gaussian.ipynb,M4A.GAUSSIAN.HISTORY.02,annual.simulation.generate_history,"74,85",Generate one chronological history
+M4A.GAUSSIAN.HISTORY.03,notebooks/modelling/01_iid_gaussian.ipynb,M4A.GAUSSIAN.HISTORY.03,annual.models.ObservedHistory,"75,87,88,89",Expose observations only
+M4A.GAUSSIAN.ESTIMATION.01,notebooks/modelling/01_iid_gaussian.ipynb,M4A.GAUSSIAN.ESTIMATION.01,annual.estimation.fit_market_model,91,Fit the observed history
+M4A.GAUSSIAN.ESTIMATION.02,notebooks/modelling/01_iid_gaussian.ipynb,M4A.GAUSSIAN.ESTIMATION.02,annual.estimation.FittedMarket,91,Inspect parameter estimates
+M4A.GAUSSIAN.ESTIMATION.03,notebooks/modelling/01_iid_gaussian.ipynb,M4A.GAUSSIAN.ESTIMATION.03,annual.estimation.fit_market_model,"90,91",Inspect estimated dependence
+M4A.GAUSSIAN.DIAGNOSTICS.01,notebooks/modelling/01_iid_gaussian.ipynb,M4A.GAUSSIAN.DIAGNOSTICS.01,annual.diagnostics.residual_diagnostics,"78,79,91",Measure residual dependence
+M4A.GAUSSIAN.DIAGNOSTICS.02,notebooks/modelling/01_iid_gaussian.ipynb,M4A.GAUSSIAN.DIAGNOSTICS.02,annual.visualization.acf_figure,"78,80,86,102",Plot volatility dependence
+M4A.GAUSSIAN.FORECAST.01,notebooks/modelling/01_iid_gaussian.ipynb,M4A.GAUSSIAN.FORECAST.01,annual.models.MarketState.next_variance,92,Check the formation-date state
+M4A.GAUSSIAN.FORECAST.02,notebooks/modelling/01_iid_gaussian.ipynb,M4A.GAUSSIAN.FORECAST.02,annual.simulation.simulate_conditional_paths,"93,94",Generate and aggregate annual futures
+M4A.GAUSSIAN.FORECAST.03,notebooks/modelling/01_iid_gaussian.ipynb,M4A.GAUSSIAN.FORECAST.03,annual.portfolio.annual_moments,"93,94",Estimate common annual moments
+M4A.GAUSSIAN.FORECAST.04,notebooks/modelling/01_iid_gaussian.ipynb,M4A.GAUSSIAN.FORECAST.04,annual.simulation.FutureSample,94,Check tail-scenario mass
+M4A.GAUSSIAN.FORECAST.05,notebooks/modelling/01_iid_gaussian.ipynb,M4A.GAUSSIAN.FORECAST.05,annual.visualization.fan_figure,102,Show conditional future paths
+M4A.GAUSSIAN.ERC.01,notebooks/modelling/01_iid_gaussian.ipynb,M4A.GAUSSIAN.ERC.01,thesis_portfolio.optimization.equal_risk_contribution,95,Solve exact annual ERC
+M4A.GAUSSIAN.ERC.02,notebooks/modelling/01_iid_gaussian.ipynb,M4A.GAUSSIAN.ERC.02,thesis_portfolio.optimization.risk_contributions,"95,98",Verify exact risk shares
+M4A.GAUSSIAN.TARGET.01,notebooks/modelling/01_iid_gaussian.ipynb,M4A.GAUSSIAN.TARGET.01,annual.portfolio.freeze_portfolios,95,Freeze the model-specific fitted target
+M4A.GAUSSIAN.MARKOWITZ.01,notebooks/modelling/01_iid_gaussian.ipynb,M4A.GAUSSIAN.MARKOWITZ.01,thesis_portfolio.optimization.markowitz,96,Minimize variance at the ERC target
+M4A.GAUSSIAN.CVAR.01,notebooks/modelling/01_iid_gaussian.ipynb,M4A.GAUSSIAN.CVAR.01,thesis_portfolio.optimization.cvar,97,Minimize annual scenario CVaR
+M4A.GAUSSIAN.FREEZE.01,notebooks/modelling/01_iid_gaussian.ipynb,M4A.GAUSSIAN.FREEZE.01,annual.portfolio.freeze_portfolios,98,Validate and freeze the comparison
+M4A.GAUSSIAN.EVALUATION.01,notebooks/modelling/01_iid_gaussian.ipynb,M4A.GAUSSIAN.EVALUATION.01,annual.simulation.oracle_continue,99,Draw shared conditional oracle futures
+M4A.GAUSSIAN.EVALUATION.02,notebooks/modelling/01_iid_gaussian.ipynb,M4A.GAUSSIAN.EVALUATION.02,annual.portfolio.evaluate_portfolios,100,Measure annual risk and forecast exceptions
+M4A.GAUSSIAN.VALIDATION.01,notebooks/modelling/01_iid_gaussian.ipynb,M4A.GAUSSIAN.VALIDATION.01,annual.diagnostics,"73,76,83,84,86",Check recurrence identities
+M4A.GAUSSIAN.VALIDATION.02,notebooks/modelling/01_iid_gaussian.ipynb,M4A.GAUSSIAN.VALIDATION.02,annual.diagnostics.parameter_comparison,"77,86,102",Compare true and fitted parameters
+M4A.GAUSSIAN.FIGURE.01,notebooks/modelling/01_iid_gaussian.ipynb,M4A.GAUSSIAN.FIGURE.01,annual.visualization.history_figure,"80,86,102",Overlay fitted and oracle historical volatility
+M4A.GAUSSIAN.FIGURE.03,notebooks/modelling/01_iid_gaussian.ipynb,M4A.GAUSSIAN.FIGURE.03,annual.visualization.portfolio_figure,"96,102",Show allocations and the annual frontier
+M4A.GAUSSIAN.FIGURE.04,notebooks/modelling/01_iid_gaussian.ipynb,M4A.GAUSSIAN.FIGURE.04,annual.visualization.loss_figure,102,Compare forecast and oracle annual losses
+M4A.GAUSSIAN.INTERPRETATION.01,notebooks/modelling/01_iid_gaussian.ipynb,M4A.GAUSSIAN.INTERPRETATION.01,annual.portfolio.evaluate_portfolios,"100,101",Summarize this run without claiming a winner
+M4A.GAUSSIAN.SAVE.01,notebooks/modelling/01_iid_gaussian.ipynb,M4A.GAUSSIAN.SAVE.01,annual.experiment.save_run,103,Save the reproducible evidence bundle
+M5.GARCH.SETUP.01,notebooks/modelling/02_garch_gaussian.ipynb,M5.GARCH.SETUP.01,thesis_portfolio.annual,S,Import the shared research machinery
+M5.GARCH.SETUP.02,notebooks/modelling/02_garch_gaussian.ipynb,M5.GARCH.SETUP.02,annual.config.load_run_config,S,Load the run configuration
+M5.GARCH.SETUP.03,notebooks/modelling/02_garch_gaussian.ipynb,M5.GARCH.SETUP.03,annual.experiment.begin_run,103,Open a new evidence record
+M5.GARCH.HISTORY.01,notebooks/modelling/02_garch_gaussian.ipynb,M5.GARCH.HISTORY.01,annual.config.oracle_state,"69,70,71,72,81,82",Construct the privileged oracle
+M5.GARCH.HISTORY.02,notebooks/modelling/02_garch_gaussian.ipynb,M5.GARCH.HISTORY.02,annual.simulation.generate_history,"74,85",Generate one chronological history
+M5.GARCH.HISTORY.03,notebooks/modelling/02_garch_gaussian.ipynb,M5.GARCH.HISTORY.03,annual.models.ObservedHistory,"75,87,88,89",Expose observations only
+M5.GARCH.ESTIMATION.01,notebooks/modelling/02_garch_gaussian.ipynb,M5.GARCH.ESTIMATION.01,annual.estimation.fit_market_model,91,Fit the observed history
+M5.GARCH.ESTIMATION.02,notebooks/modelling/02_garch_gaussian.ipynb,M5.GARCH.ESTIMATION.02,annual.estimation.FittedMarket,91,Inspect parameter estimates
+M5.GARCH.ESTIMATION.03,notebooks/modelling/02_garch_gaussian.ipynb,M5.GARCH.ESTIMATION.03,annual.estimation.fit_market_model,"90,91",Inspect estimated dependence
+M5.GARCH.DIAGNOSTICS.01,notebooks/modelling/02_garch_gaussian.ipynb,M5.GARCH.DIAGNOSTICS.01,annual.diagnostics.residual_diagnostics,"78,79,91",Measure residual dependence
+M5.GARCH.DIAGNOSTICS.02,notebooks/modelling/02_garch_gaussian.ipynb,M5.GARCH.DIAGNOSTICS.02,annual.visualization.acf_figure,"78,80,86,102",Plot volatility dependence
+M5.GARCH.FORECAST.01,notebooks/modelling/02_garch_gaussian.ipynb,M5.GARCH.FORECAST.01,annual.models.MarketState.next_variance,92,Check the formation-date state
+M5.GARCH.FORECAST.02,notebooks/modelling/02_garch_gaussian.ipynb,M5.GARCH.FORECAST.02,annual.simulation.simulate_conditional_paths,"93,94",Generate and aggregate annual futures
+M5.GARCH.FORECAST.03,notebooks/modelling/02_garch_gaussian.ipynb,M5.GARCH.FORECAST.03,annual.portfolio.annual_moments,"93,94",Estimate common annual moments
+M5.GARCH.FORECAST.04,notebooks/modelling/02_garch_gaussian.ipynb,M5.GARCH.FORECAST.04,annual.simulation.FutureSample,94,Check tail-scenario mass
+M5.GARCH.FORECAST.05,notebooks/modelling/02_garch_gaussian.ipynb,M5.GARCH.FORECAST.05,annual.visualization.fan_figure,102,Show conditional future paths
+M5.GARCH.ERC.01,notebooks/modelling/02_garch_gaussian.ipynb,M5.GARCH.ERC.01,thesis_portfolio.optimization.equal_risk_contribution,95,Solve exact annual ERC
+M5.GARCH.ERC.02,notebooks/modelling/02_garch_gaussian.ipynb,M5.GARCH.ERC.02,thesis_portfolio.optimization.risk_contributions,"95,98",Verify exact risk shares
+M5.GARCH.TARGET.01,notebooks/modelling/02_garch_gaussian.ipynb,M5.GARCH.TARGET.01,annual.portfolio.freeze_portfolios,95,Freeze the model-specific fitted target
+M5.GARCH.MARKOWITZ.01,notebooks/modelling/02_garch_gaussian.ipynb,M5.GARCH.MARKOWITZ.01,thesis_portfolio.optimization.markowitz,96,Minimize variance at the ERC target
+M5.GARCH.CVAR.01,notebooks/modelling/02_garch_gaussian.ipynb,M5.GARCH.CVAR.01,thesis_portfolio.optimization.cvar,97,Minimize annual scenario CVaR
+M5.GARCH.FREEZE.01,notebooks/modelling/02_garch_gaussian.ipynb,M5.GARCH.FREEZE.01,annual.portfolio.freeze_portfolios,98,Validate and freeze the comparison
+M5.GARCH.COMPARATOR.01,notebooks/modelling/02_garch_gaussian.ipynb,M5.GARCH.COMPARATOR.01,annual.estimation.fit_market_model,"89,94,101",Fit the Gaussian comparator
+M5.GARCH.COMPARATOR.02,notebooks/modelling/02_garch_gaussian.ipynb,M5.GARCH.COMPARATOR.02,annual.simulation.simulate_conditional_paths,94,Generate Gaussian annual forecasts
+M5.GARCH.COMPARATOR.03,notebooks/modelling/02_garch_gaussian.ipynb,M5.GARCH.COMPARATOR.03,annual.portfolio.optimize_portfolios,"95,96,97,98",Optimize and freeze the comparator
+M5.GARCH.EVALUATION.01,notebooks/modelling/02_garch_gaussian.ipynb,M5.GARCH.EVALUATION.01,annual.simulation.oracle_continue,99,Draw shared conditional oracle futures
+M5.GARCH.EVALUATION.02,notebooks/modelling/02_garch_gaussian.ipynb,M5.GARCH.EVALUATION.02,annual.portfolio.evaluate_portfolios,100,Measure annual risk and forecast exceptions
+M5.GARCH.EVALUATION.03,notebooks/modelling/02_garch_gaussian.ipynb,M5.GARCH.EVALUATION.03,annual.portfolio.evaluate_portfolios,101,Compare forecasts on common oracle outcomes
+M5.GARCH.VALIDATION.01,notebooks/modelling/02_garch_gaussian.ipynb,M5.GARCH.VALIDATION.01,annual.diagnostics,"73,76,83,84,86",Check recurrence identities
+M5.GARCH.VALIDATION.02,notebooks/modelling/02_garch_gaussian.ipynb,M5.GARCH.VALIDATION.02,annual.diagnostics.parameter_comparison,"77,86,102",Compare true and fitted parameters
+M5.GARCH.FIGURE.01,notebooks/modelling/02_garch_gaussian.ipynb,M5.GARCH.FIGURE.01,annual.visualization.history_figure,"80,86,102",Overlay fitted and oracle historical volatility
+M5.GARCH.FIGURE.03,notebooks/modelling/02_garch_gaussian.ipynb,M5.GARCH.FIGURE.03,annual.visualization.portfolio_figure,"96,102",Show allocations and the annual frontier
+M5.GARCH.FIGURE.04,notebooks/modelling/02_garch_gaussian.ipynb,M5.GARCH.FIGURE.04,annual.visualization.loss_figure,102,Compare forecast and oracle annual losses
+M5.GARCH.INTERPRETATION.01,notebooks/modelling/02_garch_gaussian.ipynb,M5.GARCH.INTERPRETATION.01,annual.portfolio.evaluate_portfolios,"100,101",Summarize this run without claiming a winner
+M5.GARCH.SAVE.01,notebooks/modelling/02_garch_gaussian.ipynb,M5.GARCH.SAVE.01,annual.experiment.save_run,103,Save the reproducible evidence bundle
+M5.GJR.SETUP.01,notebooks/modelling/03_gjr_gaussian.ipynb,M5.GJR.SETUP.01,thesis_portfolio.annual,S,Import the shared research machinery
+M5.GJR.SETUP.02,notebooks/modelling/03_gjr_gaussian.ipynb,M5.GJR.SETUP.02,annual.config.load_run_config,S,Load the run configuration
+M5.GJR.SETUP.03,notebooks/modelling/03_gjr_gaussian.ipynb,M5.GJR.SETUP.03,annual.experiment.begin_run,103,Open a new evidence record
+M5.GJR.HISTORY.01,notebooks/modelling/03_gjr_gaussian.ipynb,M5.GJR.HISTORY.01,annual.config.oracle_state,"69,70,71,72,81,82",Construct the privileged oracle
+M5.GJR.HISTORY.02,notebooks/modelling/03_gjr_gaussian.ipynb,M5.GJR.HISTORY.02,annual.simulation.generate_history,"74,85",Generate one chronological history
+M5.GJR.HISTORY.03,notebooks/modelling/03_gjr_gaussian.ipynb,M5.GJR.HISTORY.03,annual.models.ObservedHistory,"75,87,88,89",Expose observations only
+M5.GJR.ESTIMATION.01,notebooks/modelling/03_gjr_gaussian.ipynb,M5.GJR.ESTIMATION.01,annual.estimation.fit_market_model,91,Fit the observed history
+M5.GJR.ESTIMATION.02,notebooks/modelling/03_gjr_gaussian.ipynb,M5.GJR.ESTIMATION.02,annual.estimation.FittedMarket,91,Inspect parameter estimates
+M5.GJR.ESTIMATION.03,notebooks/modelling/03_gjr_gaussian.ipynb,M5.GJR.ESTIMATION.03,annual.estimation.fit_market_model,"90,91",Inspect estimated dependence
+M5.GJR.DIAGNOSTICS.01,notebooks/modelling/03_gjr_gaussian.ipynb,M5.GJR.DIAGNOSTICS.01,annual.diagnostics.residual_diagnostics,"78,79,91",Measure residual dependence
+M5.GJR.DIAGNOSTICS.02,notebooks/modelling/03_gjr_gaussian.ipynb,M5.GJR.DIAGNOSTICS.02,annual.visualization.acf_figure,"78,80,86,102",Plot volatility dependence
+M5.GJR.FORECAST.01,notebooks/modelling/03_gjr_gaussian.ipynb,M5.GJR.FORECAST.01,annual.models.MarketState.next_variance,92,Check the formation-date state
+M5.GJR.FORECAST.02,notebooks/modelling/03_gjr_gaussian.ipynb,M5.GJR.FORECAST.02,annual.simulation.simulate_conditional_paths,"93,94",Generate and aggregate annual futures
+M5.GJR.FORECAST.03,notebooks/modelling/03_gjr_gaussian.ipynb,M5.GJR.FORECAST.03,annual.portfolio.annual_moments,"93,94",Estimate common annual moments
+M5.GJR.FORECAST.04,notebooks/modelling/03_gjr_gaussian.ipynb,M5.GJR.FORECAST.04,annual.simulation.FutureSample,94,Check tail-scenario mass
+M5.GJR.FORECAST.05,notebooks/modelling/03_gjr_gaussian.ipynb,M5.GJR.FORECAST.05,annual.visualization.fan_figure,102,Show conditional future paths
+M5.GJR.ERC.01,notebooks/modelling/03_gjr_gaussian.ipynb,M5.GJR.ERC.01,thesis_portfolio.optimization.equal_risk_contribution,95,Solve exact annual ERC
+M5.GJR.ERC.02,notebooks/modelling/03_gjr_gaussian.ipynb,M5.GJR.ERC.02,thesis_portfolio.optimization.risk_contributions,"95,98",Verify exact risk shares
+M5.GJR.TARGET.01,notebooks/modelling/03_gjr_gaussian.ipynb,M5.GJR.TARGET.01,annual.portfolio.freeze_portfolios,95,Freeze the model-specific fitted target
+M5.GJR.MARKOWITZ.01,notebooks/modelling/03_gjr_gaussian.ipynb,M5.GJR.MARKOWITZ.01,thesis_portfolio.optimization.markowitz,96,Minimize variance at the ERC target
+M5.GJR.CVAR.01,notebooks/modelling/03_gjr_gaussian.ipynb,M5.GJR.CVAR.01,thesis_portfolio.optimization.cvar,97,Minimize annual scenario CVaR
+M5.GJR.FREEZE.01,notebooks/modelling/03_gjr_gaussian.ipynb,M5.GJR.FREEZE.01,annual.portfolio.freeze_portfolios,98,Validate and freeze the comparison
+M5.GJR.COMPARATOR.01,notebooks/modelling/03_gjr_gaussian.ipynb,M5.GJR.COMPARATOR.01,annual.estimation.fit_market_model,"89,94,101",Fit the Gaussian comparator
+M5.GJR.COMPARATOR.02,notebooks/modelling/03_gjr_gaussian.ipynb,M5.GJR.COMPARATOR.02,annual.simulation.simulate_conditional_paths,94,Generate Gaussian annual forecasts
+M5.GJR.COMPARATOR.03,notebooks/modelling/03_gjr_gaussian.ipynb,M5.GJR.COMPARATOR.03,annual.portfolio.optimize_portfolios,"95,96,97,98",Optimize and freeze the comparator
+M5.GJR.EVALUATION.01,notebooks/modelling/03_gjr_gaussian.ipynb,M5.GJR.EVALUATION.01,annual.simulation.oracle_continue,99,Draw shared conditional oracle futures
+M5.GJR.EVALUATION.02,notebooks/modelling/03_gjr_gaussian.ipynb,M5.GJR.EVALUATION.02,annual.portfolio.evaluate_portfolios,100,Measure annual risk and forecast exceptions
+M5.GJR.EVALUATION.03,notebooks/modelling/03_gjr_gaussian.ipynb,M5.GJR.EVALUATION.03,annual.portfolio.evaluate_portfolios,101,Compare forecasts on common oracle outcomes
+M5.GJR.VALIDATION.01,notebooks/modelling/03_gjr_gaussian.ipynb,M5.GJR.VALIDATION.01,annual.diagnostics,"73,76,83,84,86",Check recurrence identities
+M5.GJR.VALIDATION.02,notebooks/modelling/03_gjr_gaussian.ipynb,M5.GJR.VALIDATION.02,annual.diagnostics.parameter_comparison,"77,86,102",Compare true and fitted parameters
+M5.GJR.FIGURE.01,notebooks/modelling/03_gjr_gaussian.ipynb,M5.GJR.FIGURE.01,annual.visualization.history_figure,"80,86,102",Overlay fitted and oracle historical volatility
+M5.GJR.FIGURE.02,notebooks/modelling/03_gjr_gaussian.ipynb,M5.GJR.FIGURE.02,annual.visualization.news_impact_figure,"84,102",Show the fitted negative-shock response
+M5.GJR.FIGURE.03,notebooks/modelling/03_gjr_gaussian.ipynb,M5.GJR.FIGURE.03,annual.visualization.portfolio_figure,"96,102",Show allocations and the annual frontier
+M5.GJR.FIGURE.04,notebooks/modelling/03_gjr_gaussian.ipynb,M5.GJR.FIGURE.04,annual.visualization.loss_figure,102,Compare forecast and oracle annual losses
+M5.GJR.INTERPRETATION.01,notebooks/modelling/03_gjr_gaussian.ipynb,M5.GJR.INTERPRETATION.01,annual.portfolio.evaluate_portfolios,"100,101",Summarize this run without claiming a winner
+M5.GJR.SAVE.01,notebooks/modelling/03_gjr_gaussian.ipynb,M5.GJR.SAVE.01,annual.experiment.save_run,103,Save the reproducible evidence bundle
+M5.FOUNDATIONS.SETUP,notebooks/foundations/01_m5_mathematical_checks.ipynb,M5.FOUNDATIONS.SETUP,annual.diagnostics,S,Import validation machinery
+M5.FOUNDATIONS.RECURRENCE,notebooks/foundations/01_m5_mathematical_checks.ipynb,M5.FOUNDATIONS.RECURRENCE,annual.models.variance_step,"73,76",Check the scalar variance formula
+M5.FOUNDATIONS.ASYMMETRY,notebooks/foundations/01_m5_mathematical_checks.ipynb,M5.FOUNDATIONS.ASYMMETRY,annual.diagnostics.mathematical_backstops,"83,84,86",Check equal-magnitude shocks
+M5.FOUNDATIONS.LIKELIHOOD,notebooks/foundations/01_m5_mathematical_checks.ipynb,M5.FOUNDATIONS.LIKELIHOOD,annual.estimation.likelihood,91,Check likelihood against a manual series
+M5.FOUNDATIONS.GRADIENT,notebooks/foundations/01_m5_mathematical_checks.ipynb,M5.FOUNDATIONS.GRADIENT,annual.estimation.likelihood,91,Check the analytic likelihood gradient
+M5.FOUNDATIONS.WEALTH,notebooks/foundations/01_m5_mathematical_checks.ipynb,M5.FOUNDATIONS.WEALTH,annual.simulation.aggregate_terminal_returns,"93,99",Distinguish buy-and-hold from daily rebalancing
+M5.FOUNDATIONS.LIMITS,notebooks/foundations/01_m5_mathematical_checks.ipynb,M5.FOUNDATIONS.LIMITS,annual.visualization.news_impact_figure,84,Plot the news-impact fixture
+M5.FOUNDATIONS.SAVE,notebooks/foundations/01_m5_mathematical_checks.ipynb,M5.FOUNDATIONS.SAVE,annual.studies.save_study,103,Save the backstop evidence
+M5.RECOVERY.SETUP,notebooks/experiments/01_parameter_recovery.ipynb,M5.RECOVERY.SETUP,annual.studies,91A,Load calibration functions
+M5.RECOVERY.FIXTURES,notebooks/experiments/01_parameter_recovery.ipynb,M5.RECOVERY.FIXTURES,annual.studies.source_fixture,"69,81,91A",Inspect source-exact fixtures
+M5.RECOVERY.RUN,notebooks/experiments/01_parameter_recovery.ipynb,M5.RECOVERY.RUN,annual.studies.recovery_study,91A,Fit all prespecified nested prefixes
+M5.RECOVERY.ERRORS,notebooks/experiments/01_parameter_recovery.ipynb,M5.RECOVERY.ERRORS,annual.diagnostics.parameter_comparison,91A,Inspect persistence and volatility error
+M5.RECOVERY.PLOT,notebooks/experiments/01_parameter_recovery.ipynb,M5.RECOVERY.PLOT,annual.visualization.recovery_figure,"91A,102",Plot recovery across historical lengths
+M5.RECOVERY.SELECTION,notebooks/experiments/01_parameter_recovery.ipynb,M5.RECOVERY.SELECTION,annual.studies.history_selection,91A,Record selection status honestly
+M5.RECOVERY.SAVE,notebooks/experiments/01_parameter_recovery.ipynb,M5.RECOVERY.SAVE,annual.studies.save_study,"91A,103",Save calibration evidence separately
+M5.CONVERGENCE.SETUP,notebooks/experiments/02_monte_carlo_convergence.ipynb,M5.CONVERGENCE.SETUP,annual.studies,101A,Load the numerical experiment
+M5.CONVERGENCE.COUNTS,notebooks/experiments/02_monte_carlo_convergence.ipynb,M5.CONVERGENCE.COUNTS,annual.studies.convergence_study,101A,Declare count grids before evaluation
+M5.CONVERGENCE.RUN,notebooks/experiments/02_monte_carlo_convergence.ipynb,M5.CONVERGENCE.RUN,annual.studies.convergence_study,101A,Run the two distinct count checks
+M5.CONVERGENCE.FORECAST,notebooks/experiments/02_monte_carlo_convergence.ipynb,M5.CONVERGENCE.FORECAST,annual.studies.convergence_study,101A,Inspect forecast count sensitivity
+M5.CONVERGENCE.EVALUATION,notebooks/experiments/02_monte_carlo_convergence.ipynb,M5.CONVERGENCE.EVALUATION,annual.portfolio.evaluate_portfolios,101A,Inspect fixed-weight evaluation precision
+M5.CONVERGENCE.PLOT,notebooks/experiments/02_monte_carlo_convergence.ipynb,M5.CONVERGENCE.PLOT,annual.studies.convergence_study,"101A,102",Plot evaluation tail estimates
+M5.CONVERGENCE.SAVE,notebooks/experiments/02_monte_carlo_convergence.ipynb,M5.CONVERGENCE.SAVE,annual.studies.save_study,103,Save count-sensitivity evidence
+M5.STRESS.SETUP,notebooks/experiments/03_market_stress.ipynb,M5.STRESS.SETUP,annual.studies,101,Load the stress study
+M5.STRESS.DESIGN,notebooks/experiments/03_market_stress.ipynb,M5.STRESS.DESIGN,annual.experiment.run_experiment,101,Display the registered controls
+M5.STRESS.RUN,notebooks/experiments/03_market_stress.ipynb,M5.STRESS.RUN,annual.studies.stress_study,101,Execute the registered stress grid
+M5.STRESS.PLOT,notebooks/experiments/03_market_stress.ipynb,M5.STRESS.PLOT,annual.studies.stress_study,102,Plot risk alongside changing targets
+M5.STRESS.SAVE,notebooks/experiments/03_market_stress.ipynb,M5.STRESS.SAVE,annual.studies.save_study,103,Save the stress comparison and run links
+M5.COMPARISON.REFERENCES,notebooks/experiments/04_three_regime_comparison.ipynb,M5.COMPARISON.REFERENCES,annual.comparison.load_comparison,"101,102,103",Read explicit evidence references
+M5.COMPARISON.LOAD,notebooks/experiments/04_three_regime_comparison.ipynb,M5.COMPARISON.LOAD,annual.comparison.load_comparison,"101,102,103",Validate and combine annual results
+M5.COMPARISON.TARGETS,notebooks/experiments/04_three_regime_comparison.ipynb,M5.COMPARISON.TARGETS,annual.comparison.load_comparison,"101,102,103",Inspect the expected-return controls
+M5.COMPARISON.DASHBOARD,notebooks/experiments/04_three_regime_comparison.ipynb,M5.COMPARISON.DASHBOARD,annual.comparison.regime_dashboard,"101,102,103",Display the three-regime dashboard
+M5.COMPARISON.SAVE,notebooks/experiments/04_three_regime_comparison.ipynb,M5.COMPARISON.SAVE,annual.studies.save_study,"101,102,103",Save comparison evidence and provenance

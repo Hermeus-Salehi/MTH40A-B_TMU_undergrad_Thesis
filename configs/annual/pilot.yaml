@@ -1,0 +1,34 @@
+name: m05_annual_pilot
+seed: 20261127
+status: provisional_pilot
+history:
+  observations: 1000
+  recovery_candidates: [300, 600, 1200]
+  reference: 1000
+  selection_status: provisional_reference_not_calibrated
+  discarded_prefix: 0
+portfolio:
+  horizon: 252
+  policy: buy_and_hold
+  target_policy: erc_fixed_return
+simulation:
+  optimization_paths: 10000
+  evaluation_paths: 50000
+  batch_size: 256
+  retained_paths: 64
+risk:
+  optimization_confidence: 0.95
+  reporting: [0.95, 0.99]
+fit:
+  maxiter: 1000
+  fit_tolerance: 0.000000001
+oracle:
+  assets: [Asset_A, Asset_B, Asset_C, Asset_D, Asset_E]
+  mean: [0.0002, 0.0003, 0.0004, 0.0005, 0.0006]
+  volatility: [0.008, 0.012, 0.016, 0.020, 0.024]
+  equicorrelation: 0.20
+  provenance: Rubtsov section 5 and 8 dynamics transcribed from research specification V2; omega scaled to provisional daily variances
+  dynamics:
+    gaussian: {alpha: 0.0, beta: 0.0, gamma: 0.0}
+    garch: {alpha: 0.20, beta: 0.50, gamma: 0.0}
+    gjr: {alpha: 0.03, beta: 0.90, gamma: 0.06}

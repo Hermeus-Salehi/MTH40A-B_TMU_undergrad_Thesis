@@ -1,0 +1,58 @@
+[
+  {
+    "notebook": "notebooks/foundations/01_m5_mathematical_checks.ipynb",
+    "profile": "smoke",
+    "status": "passed",
+    "code_cells": 8,
+    "seconds": 16.391932083992288
+  },
+  {
+    "notebook": "notebooks/experiments/01_parameter_recovery.ipynb",
+    "profile": "smoke",
+    "status": "passed",
+    "code_cells": 7,
+    "seconds": 2.3191650421358645
+  },
+  {
+    "notebook": "notebooks/modelling/01_iid_gaussian.ipynb",
+    "profile": "smoke",
+    "status": "passed",
+    "code_cells": 31,
+    "seconds": 3.9250727500766516
+  },
+  {
+    "notebook": "notebooks/modelling/02_garch_gaussian.ipynb",
+    "profile": "smoke",
+    "status": "passed",
+    "code_cells": 35,
+    "seconds": 3.765219666995108
+  },
+  {
+    "notebook": "notebooks/modelling/03_gjr_gaussian.ipynb",
+    "profile": "smoke",
+    "status": "passed",
+    "code_cells": 36,
+    "seconds": 3.9144338748883456
+  },
+  {
+    "notebook": "notebooks/experiments/02_monte_carlo_convergence.ipynb",
+    "profile": "smoke",
+    "status": "passed",
+    "code_cells": 7,
+    "seconds": 2.234647125005722
+  },
+  {
+    "notebook": "notebooks/experiments/03_market_stress.ipynb",
+    "profile": "smoke",
+    "status": "passed",
+    "code_cells": 5,
+    "seconds": 4.049726708093658
+  },
+  {
+    "notebook": "tmp/m5_legacy_validation/Milestone_4_Gaussian_Baseline.ipynb",
+    "profile": "smoke",
+    "status": "passed",
+    "code_cells": 506,
+    "seconds": 15.283882125047967
+  }
+]

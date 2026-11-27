@@ -1,0 +1,28 @@
+name: m05_annual_pilot
+status: provisional_pilot
+history:
+  observations: 1000
+  recovery_candidates:
+  - 300
+  - 600
+  - 1200
+  reference: 1000
+  selection_status: provisional_reference_not_calibrated
+  discarded_prefix: 0
+portfolio:
+  horizon: 252
+  policy: buy_and_hold
+  target_policy: erc_fixed_return
+simulation:
+  optimization_paths: 10000
+  evaluation_paths: 50000
+  batch_size: 256
+  retained_paths: 64
+risk:
+  optimization_confidence: 0.95
+  reporting:
+  - 0.95
+  - 0.99
+fit:
+  maxiter: 1000
+  fit_tolerance: 1.0e-09

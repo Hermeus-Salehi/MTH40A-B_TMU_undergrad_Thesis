@@ -1,0 +1,60 @@
+{
+  "ERC": {
+    "solver": "damped_newton_risk_budget",
+    "success": true,
+    "status": 0,
+    "message": "Risk-budget first-order conditions satisfied",
+    "iterations": 5,
+    "objective_name": "maximum_absolute_risk_share_error",
+    "convex_objective": 1.3830081499897626,
+    "covariance_scale": 0.1559232256882531,
+    "risk_share_error": 3.0808688933348094e-15,
+    "risk_shares": [
+      0.19999999999999812,
+      0.2000000000000015,
+      0.19999999999999693,
+      0.20000000000000165,
+      0.2000000000000018
+    ],
+    "budget_error": 1.1102230246251565e-16,
+    "minimum_weight": 0.10225185262531436
+  },
+  "Markowitz": {
+    "solver": "scipy.optimize.SLSQP",
+    "success": true,
+    "status": 0,
+    "message": "Optimization terminated successfully",
+    "iterations": 8,
+    "objective_name": "variance",
+    "objective_scale": 0.1559232256882531,
+    "target_constraint": "equal",
+    "raw_minimum_weight": 4.181580149076287e-17,
+    "roundoff_weights_zeroed": 0,
+    "budget_error": 0.0,
+    "minimum_weight": 4.181580149076287e-17,
+    "estimated_return": -0.10825344947659077,
+    "target_shortfall": 0.0,
+    "target_error": 1.3877787807814457e-17
+  },
+  "CVaR": {
+    "solver": "scipy.optimize.linprog.highs",
+    "success": true,
+    "status": 0,
+    "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+    "iterations": 2341,
+    "objective_name": "empirical_cvar_loss",
+    "confidence": 0.95,
+    "return_scale": 3.597888498884623,
+    "eta": 0.31256018935784563,
+    "scaled_inequality_violation": 2.7755575615628914e-17,
+    "scenario_count": 10000,
+    "target_constraint": "equal",
+    "raw_minimum_weight": 0.0,
+    "roundoff_weights_zeroed": 0,
+    "budget_error": 1.1102230246251565e-16,
+    "minimum_weight": 0.0,
+    "estimated_return": -0.10825344947659078,
+    "target_shortfall": 0.0,
+    "target_error": 0.0
+  }
+}
